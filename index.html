@@ -1,3316 +1,2033 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>WhatsApp - You & Uzair</title>
-
-  <!-- Your logo -->
-  <link rel="icon" type="image/png" href="whatsapp.png">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --green: #25d366;
-      --green-dark: #128c7e;
-      --light-green: #dcf8c6;
-      --bg: #efeae2;
-      --panel: #f7f9fa;
-      --white: #ffffff;
-      --text: #17202a;
-      --muted: #667781;
-      --border: #d9e0e3;
-      --danger: #e53935;
-      --shadow: 0 8px 30px rgba(0,0,0,.08);
-    }
-
-    body.dark {
-      --bg: #111b21;
-      --panel: #202c33;
-      --white: #202c33;
-      --text: #e9edef;
-      --muted: #aebac1;
-      --border: #374045;
-      --light-green: #005c4b;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    button {
-      border: none;
-      cursor: pointer;
-    }
-
-    /* =========================
-       MAIN APP
-    ========================= */
-
-    .app {
-      width: 100%;
-      height: 100vh;
-      display: grid;
-      grid-template-columns: 300px minmax(420px, 1fr) 300px;
-      background: var(--bg);
-    }
-
-    /* =========================
-       SIDE PANELS
-    ========================= */
-
-    .side {
-      height: 100vh;
-      background: var(--panel);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .right-side {
-      border-right: none;
-      border-left: 1px solid var(--border);
-    }
-
-    .side-header {
-      height: 72px;
-      padding: 12px 16px;
-      background: var(--green-dark);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .profile {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #ddd;
-      flex-shrink: 0;
-    }
-
-    .avatar-text {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--green);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: bold;
-      flex-shrink: 0;
-    }
-
-    .profile-name {
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .profile-status {
-      font-size: 12px;
-      opacity: .9;
-      margin-top: 3px;
-    }
-
-    .header-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.12);
-      color: white;
-      font-size: 19px;
-    }
-
-    .header-btn:hover {
-      background: rgba(255,255,255,.22);
-    }
-
-    /* =========================
-       SIDE PROFILE CARD
-    ========================= */
-
-    .side-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-    }
-
-    .profile-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      margin-bottom: 15px;
-    }
-
-    .profile-large {
-      text-align: center;
-      padding: 10px 0 16px;
-    }
-
-    .profile-large img,
-    .profile-large .avatar-text {
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 12px;
-      display: flex;
-      object-fit: cover;
-    }
-
-    .profile-large img {
-      border-radius: 50%;
-    }
-
-    .profile-large .avatar-text {
-      border-radius: 50%;
-      font-size: 30px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .profile-large h2 {
-      font-size: 21px;
-      margin-bottom: 5px;
-    }
-
-    .profile-large p {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .info-row {
-      padding: 12px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .info-title {
-      color: var(--muted);
-      font-size: 11px;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-    }
-
-    .info-value {
-      font-size: 14px;
-    }
-
-    .settings-list {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-
-    .settings-title {
-      padding: 14px 16px;
-      font-weight: bold;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .setting-row {
-      padding: 13px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-    }
-
-    .setting-row:last-child {
-      border-bottom: none;
-    }
-
-    .switch {
-      position: relative;
-      width: 42px;
-      height: 23px;
-    }
-
-    .switch input {
-      display: none;
-    }
-
-    .slider {
-      position: absolute;
-      inset: 0;
-      background: #bbb;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: .2s;
-    }
-
-    .slider:before {
-      content: "";
-      position: absolute;
-      width: 17px;
-      height: 17px;
-      left: 3px;
-      top: 3px;
-      background: white;
-      border-radius: 50%;
-      transition: .2s;
-    }
-
-    .switch input:checked + .slider {
-      background: var(--green);
-    }
-
-    .switch input:checked + .slider:before {
-      transform: translateX(19px);
-    }
-
-    /* =========================
-       SIDE COMPOSER
-    ========================= */
-
-    .side-composer {
-      border-top: 1px solid var(--border);
-      background: var(--panel);
-      padding: 10px;
-    }
-
-    .composer-label {
-      font-size: 11px;
-      color: var(--muted);
-      padding: 0 5px 7px;
-      text-transform: uppercase;
-      font-weight: bold;
-    }
-
-    .composer {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 25px;
-      padding: 5px;
-    }
-
-    .composer input {
-      flex: 1;
-      min-width: 0;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: var(--text);
-      padding: 8px 4px;
-      font-size: 13px;
-    }
-
-    .icon-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: transparent;
-      color: var(--muted);
-      font-size: 17px;
-      flex-shrink: 0;
-    }
-
-    .icon-btn:hover {
-      background: rgba(128,128,128,.12);
-    }
-
-    .send-btn {
-      background: var(--green);
-      color: white;
-    }
-
-    .send-btn:hover {
-      background: #1ebe5d;
-    }
-
-    /* =========================
-       CENTER CHAT
-    ========================= */
-
-    .chat {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      background: var(--bg);
-    }
-
-    .chat-header {
-      height: 72px;
-      background: var(--green-dark);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      flex-shrink: 0;
-    }
-
-    .chat-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .chat-title img {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .chat-title h1 {
-      font-size: 17px;
-    }
-
-    .chat-title p {
-      font-size: 12px;
-      margin-top: 3px;
-      opacity: .9;
-    }
-
-    .chat-actions {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .search-box {
-      display: none;
-      background: white;
-      border-radius: 18px;
-      padding: 5px 10px;
-    }
-
-    .search-box input {
-      width: 150px;
-      border: none;
-      outline: none;
-      font-size: 12px;
-    }
-
-    /* =========================
-       MESSAGES
-    ========================= */
-
-    .messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px 7%;
-      background-color: var(--bg);
-      background-image:
-        radial-gradient(rgba(100,100,100,.08) 1px, transparent 1px);
-      background-size: 18px 18px;
-      scroll-behavior: smooth;
-    }
-
-    .date-divider {
-      display: flex;
-      justify-content: center;
-      margin: 12px 0 18px;
-    }
-
-    .date-divider span {
-      background: rgba(150,150,150,.25);
-      color: var(--muted);
-      padding: 5px 12px;
-      border-radius: 10px;
-      font-size: 11px;
-    }
-
-    .message-row {
-      display: flex;
-      margin-bottom: 8px;
-    }
-
-    .message-row.me {
-      justify-content: flex-start;
-    }
-
-    .message-row.uzair {
-      justify-content: flex-end;
-    }
-
-    .bubble {
-      max-width: 72%;
-      min-width: 90px;
-      padding: 8px 10px 6px;
-      border-radius: 9px;
-      position: relative;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
-      cursor: context-menu;
-      word-wrap: break-word;
-    }
-
-    .me .bubble {
-      background: var(--white);
-      border-top-left-radius: 2px;
-    }
-
-    .uzair .bubble {
-      background: var(--light-green);
-      border-top-right-radius: 2px;
-    }
-
-    .message-text {
-      font-size: 14px;
-      line-height: 1.45;
-      white-space: pre-wrap;
-      padding-right: 35px;
-    }
-
-    .message-meta {
-      display: flex;
-      justify-content: flex-end;
-      gap: 4px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 9px;
-      margin-top: 4px;
-    }
-
-    .ticks {
-      color: #53bdeb;
-      font-size: 12px;
-    }
-
-    .message-reaction {
-      position: absolute;
-      bottom: -8px;
-      left: 8px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1px 5px;
-      font-size: 12px;
-    }
-
-    .star {
-      color: #f4b400;
-    }
-
-    .reply-preview {
-      border-left: 3px solid var(--green);
-      background: rgba(128,128,128,.10);
-      border-radius: 4px;
-      padding: 5px 7px;
-      margin-bottom: 6px;
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    .attachment {
-      margin-top: 3px;
-    }
-
-    .attachment img {
-      max-width: 250px;
-      max-height: 220px;
-      border-radius: 7px;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .attachment a {
-      color: inherit;
-      text-decoration: none;
-      font-size: 13px;
-    }
-
-    .audio-player {
-      width: 210px;
-      max-width: 100%;
-    }
-
-    /* =========================
-       SEARCH
-    ========================= */
-
-    .search-panel {
-      position: absolute;
-      top: 70px;
-      right: 10px;
-      z-index: 20;
-      background: var(--white);
-      border: 1px solid var(--border);
-      padding: 8px;
-      border-radius: 10px;
-      display: none;
-      box-shadow: var(--shadow);
-    }
-
-    .search-panel input {
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      padding: 7px 9px;
-      outline: none;
-      border-radius: 7px;
-    }
-
-    /* =========================
-       EMOJI PANEL
-    ========================= */
-
-    .emoji-panel {
-      position: fixed;
-      z-index: 100;
-      display: none;
-      width: 270px;
-      max-height: 190px;
-      overflow-y: auto;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px;
-      box-shadow: var(--shadow);
-    }
-
-    .emoji {
-      width: 35px;
-      height: 35px;
-      background: transparent;
-      font-size: 20px;
-      border-radius: 6px;
-    }
-
-    .emoji:hover {
-      background: rgba(128,128,128,.12);
-    }
-
-    /* =========================
-       CONTEXT MENU
-    ========================= */
-
-    .context-menu {
-      position: fixed;
-      display: none;
-      z-index: 200;
-      width: 160px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-
-    .context-menu button {
-      display: block;
-      width: 100%;
-      padding: 10px 13px;
-      background: transparent;
-      color: var(--text);
-      text-align: left;
-      font-size: 12px;
-    }
-
-    .context-menu button:hover {
-      background: rgba(128,128,128,.12);
-    }
-
-    /* =========================
-       TYPING / REPLY BAR
-    ========================= */
-
-    .reply-bar {
-      display: none;
-      padding: 7px 10px;
-      background: var(--white);
-      border-top: 1px solid var(--border);
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .reply-bar strong {
-      color: var(--green-dark);
-    }
-
-    .reply-close {
-      float: right;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    /* =========================
-       MODAL
-    ========================= */
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.55);
-      z-index: 500;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .modal {
-      width: 440px;
-      max-width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      background: var(--white);
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.3);
-    }
-
-    .modal h2 {
-      margin-bottom: 15px;
-    }
-
-    .modal-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 13px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
-
-    .modal-btn {
-      padding: 9px 13px;
-      border-radius: 8px;
-      background: var(--green);
-      color: white;
-      font-size: 12px;
-    }
-
-    .modal-btn.danger {
-      background: var(--danger);
-    }
-
-    .modal-btn.secondary {
-      background: #777;
-    }
-
-    /* =========================
-       RECORDING
-    ========================= */
-
-    .recording {
-      animation: pulse 1s infinite;
-      color: red !important;
-    }
-
-    @keyframes pulse {
-      50% {
-        transform: scale(1.12);
-      }
-    }
-
-    /* =========================
-       TOAST
-    ========================= */
-
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #222;
-      color: white;
-      padding: 9px 15px;
-      border-radius: 20px;
-      font-size: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transition: .25s;
-      z-index: 1000;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* =========================
-       RESPONSIVE
-    ========================= */
-
-    @media (max-width: 1100px) {
-      .app {
-        grid-template-columns: 240px minmax(360px, 1fr) 240px;
-      }
-
-      .messages {
-        padding-left: 4%;
-        padding-right: 4%;
-      }
-    }
-
-    @media (max-width: 850px) {
-      .app {
-        grid-template-columns: 190px minmax(330px, 1fr) 190px;
-      }
-
-      .side-content {
-        padding: 10px;
-      }
-
-      .profile-large h2 {
-        font-size: 17px;
-      }
-
-      .settings-list {
-        font-size: 11px;
-      }
-
-      .bubble {
-        max-width: 85%;
-      }
-    }
-
-    @media (max-width: 700px) {
-      body {
-        overflow: auto;
-      }
-
-      .app {
-        height: auto;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .side {
-        height: auto;
-        min-height: 390px;
-      }
-
-      .chat {
-        height: 650px;
-        order: -1;
-      }
-
-      .side-content {
-        max-height: 300px;
-      }
-
-      .left-side,
-      .right-side {
-        border: none;
-        border-top: 1px solid var(--border);
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WhatsApp Chat Simulator</title>
+<link rel="icon" href="whatsapp.png">
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#d9dbd5;
+  color:#111;
+  height:100vh;
+  overflow:hidden;
+}
+
+body.dark{
+  background:#111b21;
+  color:#e9edef;
+}
+
+.app{
+  width:100%;
+  height:100vh;
+  display:grid;
+  grid-template-columns:280px 1fr 280px;
+}
+
+/* ================= LEFT / RIGHT PANELS ================= */
+
+.side{
+  background:#f0f2f5;
+  border-right:1px solid #d1d7db;
+  display:flex;
+  flex-direction:column;
+}
+
+.right{
+  border-right:none;
+  border-left:1px solid #d1d7db;
+}
+
+.dark .side{
+  background:#202c33;
+  border-color:#374045;
+}
+
+.profile{
+  height:72px;
+  background:#075e54;
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 14px;
+}
+
+.profile img{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  object-fit:cover;
+  background:white;
+}
+
+.profile-info{
+  flex:1;
+}
+
+.profile-info strong{
+  display:block;
+  font-size:16px;
+}
+
+.profile-info small{
+  opacity:.85;
+}
+
+.composer-title{
+  padding:14px;
+  font-size:13px;
+  font-weight:bold;
+  color:#667781;
+}
+
+.dark .composer-title{
+  color:#aebac1;
+}
+
+.composer{
+  margin:0 12px 12px;
+  background:white;
+  border-radius:10px;
+  padding:10px;
+  box-shadow:0 1px 3px #0002;
+}
+
+.dark .composer{
+  background:#111b21;
+}
+
+textarea{
+  width:100%;
+  height:90px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  padding:10px;
+  resize:none;
+  outline:none;
+  font-size:14px;
+  background:white;
+  color:#111;
+}
+
+.dark textarea{
+  background:#202c33;
+  color:#e9edef;
+  border-color:#374045;
+}
+
+.send-row{
+  display:flex;
+  gap:6px;
+  margin-top:8px;
+}
+
+.send-btn{
+  flex:1;
+  border:none;
+  border-radius:8px;
+  background:#25d366;
+  color:white;
+  padding:10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.send-btn:hover{
+  background:#20bd5c;
+}
+
+.emoji-btn{
+  width:42px;
+  border:none;
+  border-radius:8px;
+  background:#e9edef;
+  cursor:pointer;
+  font-size:20px;
+}
+
+.dark .emoji-btn{
+  background:#374045;
+  color:white;
+}
+
+.side-buttons{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  margin-top:auto;
+}
+
+.side-buttons button{
+  border:none;
+  padding:10px;
+  border-radius:8px;
+  cursor:pointer;
+  background:#e9edef;
+  text-align:left;
+}
+
+.dark .side-buttons button{
+  background:#374045;
+  color:#e9edef;
+}
+
+/* ================= CENTER ================= */
+
+.chat{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  background:#efeae2;
+}
+
+.dark .chat{
+  background:#0b141a;
+}
+
+.chat-header{
+  height:72px;
+  background:#075e54;
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 18px;
+}
+
+.chat-header img{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:white;
+}
+
+.chat-user{
+  flex:1;
+}
+
+.chat-user strong{
+  display:block;
+  font-size:17px;
+}
+
+.chat-user small{
+  opacity:.85;
+}
+
+.header-actions{
+  display:flex;
+  gap:7px;
+}
+
+.header-actions button{
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+  background:#ffffff20;
+  color:white;
+  font-size:18px;
+}
+
+.search-box{
+  display:none;
+  padding:8px;
+  background:#f0f2f5;
+}
+
+.search-box.show{
+  display:block;
+}
+
+.search-box input{
+  width:100%;
+  padding:9px 12px;
+  border:1px solid #ddd;
+  border-radius:20px;
+  outline:none;
+}
+
+.dark .search-box{
+  background:#202c33;
+}
+
+.dark .search-box input{
+  background:#111b21;
+  color:white;
+  border-color:#374045;
+}
+
+/* ================= MESSAGES ================= */
+
+.messages{
+  flex:1;
+  overflow-y:auto;
+  padding:22px 6%;
+  background-image:
+    radial-gradient(#00000008 1px,transparent 1px);
+  background-size:18px 18px;
+}
+
+.dark .messages{
+  background-image:
+    radial-gradient(#ffffff08 1px,transparent 1px);
+}
+
+.empty{
+  text-align:center;
+  margin-top:80px;
+  color:#667781;
+}
+
+.dark .empty{
+  color:#8696a0;
+}
+
+.message-row{
+  display:flex;
+  margin-bottom:8px;
+}
+
+.message-row.me{
+  justify-content:flex-start;
+}
+
+.message-row.uzair{
+  justify-content:flex-end;
+}
+
+.message{
+  max-width:70%;
+  padding:8px 10px 6px;
+  border-radius:8px;
+  position:relative;
+  box-shadow:0 1px 1px #0002;
+}
+
+.me .message{
+  background:#d9fdd3;
+  border-top-left-radius:2px;
+}
+
+.uzair .message{
+  background:#ffffff;
+  border-top-right-radius:2px;
+}
+
+.dark .uzair .message{
+  background:#202c33;
+}
+
+.dark .me .message{
+  background:#005c4b;
+  color:#e9edef;
+}
+
+.message-name{
+  font-size:12px;
+  font-weight:bold;
+  color:#075e54;
+  margin-bottom:3px;
+}
+
+.dark .message-name{
+  color:#53bdeb;
+}
+
+.message-text{
+  white-space:pre-wrap;
+  word-break:break-word;
+  font-size:14px;
+  line-height:1.45;
+}
+
+.message-meta{
+  font-size:10px;
+  color:#667781;
+  text-align:right;
+  margin-top:4px;
+}
+
+.dark .message-meta{
+  color:#aebac1;
+}
+
+.message-tools{
+  display:none;
+  position:absolute;
+  right:3px;
+  top:-31px;
+  background:white;
+  border-radius:7px;
+  box-shadow:0 2px 8px #0003;
+  padding:4px;
+  gap:2px;
+}
+
+.message:hover .message-tools{
+  display:flex;
+}
+
+.message-tools button{
+  border:none;
+  background:none;
+  padding:5px;
+  cursor:pointer;
+  border-radius:5px;
+}
+
+.message-tools button:hover{
+  background:#eee;
+}
+
+.dark .message-tools{
+  background:#202c33;
+}
+
+.dark .message-tools button{
+  color:white;
+}
+
+.starred{
+  color:#eab308;
+}
+
+/* ================= CENTER FOOTER ================= */
+
+.chat-footer{
+  background:#f0f2f5;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.dark .chat-footer{
+  background:#202c33;
+}
+
+.chat-footer button{
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:20px;
+  background:transparent;
+}
+
+.center-input{
+  flex:1;
+  height:44px;
+  border:none;
+  border-radius:22px;
+  padding:0 16px;
+  outline:none;
+  background:white;
+}
+
+.dark .center-input{
+  background:#111b21;
+  color:white;
+}
+
+.center-send{
+  background:#25d366 !important;
+  color:white;
+}
+
+/* ================= EMOJI ================= */
+
+.emoji-panel{
+  position:absolute;
+  bottom:70px;
+  left:10px;
+  width:300px;
+  max-height:230px;
+  overflow:auto;
+  background:white;
+  border-radius:10px;
+  box-shadow:0 3px 15px #0004;
+  padding:10px;
+  display:none;
+  z-index:20;
+}
+
+.emoji-panel.show{
+  display:block;
+}
+
+.dark .emoji-panel{
+  background:#202c33;
+}
+
+.emoji{
+  display:inline-block;
+  font-size:25px;
+  padding:5px;
+  cursor:pointer;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#222;
+  color:white;
+  padding:11px 18px;
+  border-radius:8px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:100;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:#0007;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:420px;
+  max-width:92%;
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.dark .modal-box{
+  background:#202c33;
+  color:white;
+}
+
+.modal-head{
+  padding:15px;
+  background:#075e54;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+}
+
+.modal-head button{
+  border:none;
+  background:none;
+  color:white;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.modal-body{
+  padding:15px;
+}
+
+.setting{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:13px 0;
+  border-bottom:1px solid #ddd;
+}
+
+.dark .setting{
+  border-color:#374045;
+}
+
+.setting button{
+  border:none;
+  padding:8px 12px;
+  border-radius:7px;
+  cursor:pointer;
+  background:#25d366;
+  color:white;
+}
+
+/* ================= CONTEXT MENU ================= */
+
+.context{
+  position:fixed;
+  display:none;
+  background:white;
+  box-shadow:0 3px 15px #0004;
+  border-radius:8px;
+  overflow:hidden;
+  z-index:100;
+}
+
+.context.show{
+  display:block;
+}
+
+.context button{
+  display:block;
+  width:160px;
+  padding:10px 13px;
+  border:none;
+  background:white;
+  text-align:left;
+  cursor:pointer;
+}
+
+.context button:hover{
+  background:#eee;
+}
+
+.dark .context{
+  background:#202c33;
+}
+
+.dark .context button{
+  background:#202c33;
+  color:white;
+}
+
+.dark .context button:hover{
+  background:#374045;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+  .app{
+    grid-template-columns:220px 1fr 220px;
+  }
+
+  .message{
+    max-width:82%;
+  }
+}
+
+@media(max-width:700px){
+  body{
+    overflow:auto;
+  }
+
+  .app{
+    height:auto;
+    min-height:100vh;
+    grid-template-columns:1fr;
+  }
+
+  .side{
+    display:none;
+  }
+
+  .chat{
+    height:100vh;
+  }
+
+  .chat-footer{
+    position:relative;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <!-- =====================================================
-         LEFT SIDE - YOU
-    ====================================================== -->
+  <!-- ================= YOU ================= -->
+  <aside class="side">
 
-    <aside class="side left-side">
+    <div class="profile">
+      <img src="whatsapp.png" alt="You">
+      <div class="profile-info">
+        <strong>YOU</strong>
+        <small>Your Profile</small>
+      </div>
+    </div>
 
-      <div class="side-header">
-        <div class="profile">
-          <div class="avatar-text">Y</div>
+    <div class="composer-title">
+      SEND MESSAGE AS YOU
+    </div>
 
-          <div>
-            <div class="profile-name">You</div>
-            <div class="profile-status" id="myStatus">
-              online
-            </div>
-          </div>
-        </div>
+    <div class="composer">
 
-        <button class="header-btn" onclick="openSettings()">
-          ⚙
+      <textarea
+        id="youInput"
+        placeholder="Type your message..."
+      ></textarea>
+
+      <div class="send-row">
+        <button class="emoji-btn" onclick="toggleEmoji('youEmoji')">😊</button>
+        <button class="send-btn" onclick="sendMessage('me')">
+          SEND
         </button>
       </div>
 
-      <div class="side-content">
+    </div>
 
-        <div class="profile-card">
+    <div id="youEmoji" class="emoji-panel"></div>
 
-          <div class="profile-large">
-            <div class="avatar-text">Y</div>
+    <div class="side-buttons">
+      <button onclick="openSettings()">⚙️ Settings</button>
+      <button onclick="exportChat()">⬇️ Export Chat</button>
+      <button onclick="clearChat()">🗑️ Clear Chat</button>
+    </div>
 
-            <h2>You</h2>
-            <p>My profile</p>
-          </div>
+  </aside>
 
-          <div class="info-row">
-            <div class="info-title">About</div>
-            <div class="info-value">
-              Available
-            </div>
-          </div>
 
-          <div class="info-row">
-            <div class="info-title">Chat</div>
-            <div class="info-value">
-              You ↔ Uzair
-            </div>
-          </div>
+  <!-- ================= CENTER CHAT ================= -->
+  <main class="chat">
 
-          <div class="info-row">
-            <div class="info-title">Messages</div>
-            <div class="info-value" id="myMessageCount">
-              0
-            </div>
-          </div>
+    <header class="chat-header">
 
-        </div>
+      <img src="whatsapp.png" alt="Uzair">
 
-        <div class="settings-list">
-
-          <div class="settings-title">
-            Your options
-          </div>
-
-          <div class="setting-row">
-            <span>Chat sounds</span>
-
-            <label class="switch">
-              <input
-                type="checkbox"
-                id="soundToggle"
-                checked
-              >
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="setting-row">
-            <span>Dark mode</span>
-
-            <label class="switch">
-              <input
-                type="checkbox"
-                id="darkToggle"
-              >
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="setting-row">
-            <span>Save chat locally</span>
-
-            <label class="switch">
-              <input
-                type="checkbox"
-                id="saveToggle"
-                checked
-              >
-              <span class="slider"></span>
-            </label>
-          </div>
-
-        </div>
-
+      <div class="chat-user">
+        <strong>Uzair</strong>
+        <small id="status">online</small>
       </div>
 
-      <!-- YOU COMPOSER -->
-
-      <div class="side-composer">
-
-        <div class="composer-label">
-          Message as You
-        </div>
-
-        <div id="myReplyBar" class="reply-bar">
-          <span id="myReplyText"></span>
-          <span
-            class="reply-close"
-            onclick="cancelReply()"
-          >×</span>
-        </div>
-
-        <div class="composer">
-
-          <button
-            class="icon-btn"
-            onclick="showEmoji(this, 'myInput')"
-            title="Emoji"
-          >
-            😊
-          </button>
-
-          <button
-            class="icon-btn"
-            onclick="openFile('myFile')"
-            title="Attachment"
-          >
-            📎
-          </button>
-
-          <input
-            id="myInput"
-            type="text"
-            placeholder="Type as You..."
-            autocomplete="off"
-          >
-
-          <button
-            id="myMic"
-            class="icon-btn"
-            onclick="toggleRecording('me')"
-            title="Voice"
-          >
-            🎙
-          </button>
-
-          <button
-            class="icon-btn send-btn"
-            onclick="sendMessage('me')"
-            title="Send"
-          >
-            ➤
-          </button>
-
-        </div>
-
-        <input
-          id="myFile"
-          type="file"
-          hidden
-          accept="image/*,audio/*,.pdf,.txt,.doc,.docx"
-          onchange="handleFile(this,'me')"
-        >
-
+      <div class="header-actions">
+        <button onclick="toggleSearch()">🔍</button>
+        <button onclick="openSettings()">⋮</button>
       </div>
 
-    </aside>
+    </header>
 
-
-    <!-- =====================================================
-         CENTER - SHARED CONVERSATION
-    ====================================================== -->
-
-    <main class="chat">
-
-      <header class="chat-header">
-
-        <div class="chat-title">
-
-          <img
-            src="whatsapp.png"
-            alt="WhatsApp"
-          >
-
-          <div>
-            <h1>You & Uzair</h1>
-
-            <p id="centerStatus">
-              Conversation open
-            </p>
-          </div>
-
-        </div>
-
-        <div class="chat-actions">
-
-          <button
-            class="header-btn"
-            onclick="toggleSearch()"
-            title="Search"
-          >
-            🔎
-          </button>
-
-          <button
-            class="header-btn"
-            onclick="openSettings()"
-            title="Settings"
-          >
-            ⚙
-          </button>
-
-        </div>
-
-      </header>
-
-
-      <!-- SEARCH -->
-
-      <div
-        id="searchPanel"
-        class="search-panel"
+    <div id="searchBox" class="search-box">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Search messages..."
+        oninput="renderMessages()"
       >
-        <input
-          id="searchInput"
-          type="text"
-          placeholder="Search messages..."
-          oninput="searchMessages()"
-        >
+    </div>
+
+
+    <section id="messages" class="messages">
+    </section>
+
+
+    <footer class="chat-footer">
+
+      <button onclick="toggleEmoji('centerEmoji')">😊</button>
+
+      <button onclick="document.getElementById('fileInput').click()">
+        📎
+      </button>
+
+      <input
+        type="file"
+        id="fileInput"
+        hidden
+        onchange="attachFile(event)"
+      >
+
+      <input
+        id="centerInput"
+        class="center-input"
+        placeholder="Type a message..."
+        autocomplete="off"
+      >
+
+      <button
+        class="center-send"
+        onclick="sendMessage('me')"
+      >
+        ➤
+      </button>
+
+    </footer>
+
+    <div id="centerEmoji" class="emoji-panel"></div>
+
+  </main>
+
+
+  <!-- ================= UZAIR ================= -->
+  <aside class="side right">
+
+    <div class="profile">
+      <img src="whatsapp.png" alt="Uzair">
+      <div class="profile-info">
+        <strong>UZAIR</strong>
+        <small>Contact</small>
       </div>
+    </div>
 
+    <div class="composer-title">
+      SEND MESSAGE AS UZAIR
+    </div>
 
-      <!-- MESSAGES -->
+    <div class="composer">
 
-      <div
-        id="messages"
-        class="messages"
-      ></div>
+      <textarea
+        id="uzairInput"
+        placeholder="Type Uzair's message..."
+      ></textarea>
 
-    </main>
-
-
-    <!-- =====================================================
-         RIGHT SIDE - UZAIR
-    ====================================================== -->
-
-    <aside class="side right-side">
-
-      <div class="side-header">
-
-        <div class="profile">
-
-          <img
-            class="avatar"
-            src="whatsapp.png"
-            alt="Uzair"
-          >
-
-          <div>
-            <div class="profile-name">
-              Uzair
-            </div>
-
-            <div
-              class="profile-status"
-              id="uzairStatus"
-            >
-              online
-            </div>
-          </div>
-
-        </div>
+      <div class="send-row">
+        <button class="emoji-btn" onclick="toggleEmoji('uzairEmoji')">😊</button>
 
         <button
-          class="header-btn"
-          onclick="openSettings()"
+          class="send-btn"
+          onclick="sendMessage('uzair')"
         >
-          ⚙
+          SEND
         </button>
-
       </div>
 
+    </div>
 
-      <div class="side-content">
+    <div id="uzairEmoji" class="emoji-panel"></div>
 
-        <div class="profile-card">
+    <div class="side-buttons">
+      <button onclick="showProfile('YOU')">👤 Your Profile</button>
+      <button onclick="showProfile('UZAIR')">👤 Uzair Profile</button>
+      <button onclick="toggleDark()">🌙 Dark Mode</button>
+    </div>
 
-          <div class="profile-large">
+  </aside>
 
-            <img
-              src="whatsapp.png"
-              alt="Uzair"
-            >
-
-            <h2>Uzair</h2>
-
-            <p>Contact</p>
-
-          </div>
-
-          <div class="info-row">
-            <div class="info-title">
-              About
-            </div>
-
-            <div class="info-value">
-              Available
-            </div>
-          </div>
-
-          <div class="info-row">
-            <div class="info-title">
-              Chat
-            </div>
-
-            <div class="info-value">
-              Open conversation
-            </div>
-          </div>
-
-          <div class="info-row">
-            <div class="info-title">
-              Messages
-            </div>
-
-            <div
-              class="info-value"
-              id="uzairMessageCount"
-            >
-              0
-            </div>
-          </div>
-
-        </div>
+</div>
 
 
-        <div class="settings-list">
+<!-- ================= TOAST ================= -->
 
-          <div class="settings-title">
-            Uzair options
-          </div>
+<div id="toast" class="toast"></div>
 
-          <div class="setting-row">
-            <span>Notifications</span>
 
-            <label class="switch">
-              <input
-                type="checkbox"
-                id="notificationToggle"
-                checked
-              >
+<!-- ================= CONTEXT MENU ================= -->
 
-              <span class="slider"></span>
-            </label>
-          </div>
+<div id="contextMenu" class="context">
 
-          <div class="setting-row">
-            <span>Chat sounds</span>
+  <button onclick="replyMessage()">↩️ Reply</button>
+  <button onclick="editMessage()">✏️ Edit</button>
+  <button onclick="copyMessage()">📋 Copy</button>
+  <button onclick="toggleStar()">⭐ Star</button>
+  <button onclick="deleteMessage()">🗑️ Delete</button>
 
-            <label class="switch">
-              <input
-                type="checkbox"
-                id="uzairSoundToggle"
-                checked
-              >
+</div>
 
-              <span class="slider"></span>
-            </label>
-          </div>
 
-          <div class="setting-row">
-            <span>Dark mode</span>
+<!-- ================= SETTINGS ================= -->
 
-            <label class="switch">
-              <input
-                type="checkbox"
-                id="uzairDarkToggle"
-              >
+<div id="settingsModal" class="modal">
 
-              <span class="slider"></span>
-            </label>
-          </div>
+  <div class="modal-box">
 
-        </div>
+    <div class="modal-head">
+      <strong>Settings</strong>
+      <button onclick="closeSettings()">×</button>
+    </div>
 
+    <div class="modal-body">
+
+      <div class="setting">
+        <span>Dark Mode</span>
+        <button onclick="toggleDark()">Toggle</button>
       </div>
 
-
-      <!-- UZAIR COMPOSER -->
-
-      <div class="side-composer">
-
-        <div class="composer-label">
-          Message as Uzair
-        </div>
-
-        <div
-          id="uzairReplyBar"
-          class="reply-bar"
-        >
-          <span id="uzairReplyText"></span>
-
-          <span
-            class="reply-close"
-            onclick="cancelReply()"
-          >×</span>
-        </div>
-
-        <div class="composer">
-
-          <button
-            class="icon-btn"
-            onclick="showEmoji(this, 'uzairInput')"
-            title="Emoji"
-          >
-            😊
-          </button>
-
-          <button
-            class="icon-btn"
-            onclick="openFile('uzairFile')"
-            title="Attachment"
-          >
-            📎
-          </button>
-
-          <input
-            id="uzairInput"
-            type="text"
-            placeholder="Type as Uzair..."
-            autocomplete="off"
-          >
-
-          <button
-            id="uzairMic"
-            class="icon-btn"
-            onclick="toggleRecording('uzair')"
-            title="Voice"
-          >
-            🎙
-          </button>
-
-          <button
-            class="icon-btn send-btn"
-            onclick="sendMessage('uzair')"
-            title="Send"
-          >
-            ➤
-          </button>
-
-        </div>
-
-        <input
-          id="uzairFile"
-          type="file"
-          hidden
-          accept="image/*,audio/*,.pdf,.txt,.doc,.docx"
-          onchange="handleFile(this,'uzair')"
-        >
-
+      <div class="setting">
+        <span>Chat Sounds</span>
+        <button onclick="toggleSound()" id="soundBtn">
+          ON
+        </button>
       </div>
 
-    </aside>
-
-  </div>
-
-
-  <!-- =====================================================
-       EMOJI PANEL
-  ====================================================== -->
-
-  <div
-    id="emojiPanel"
-    class="emoji-panel"
-  ></div>
-
-
-  <!-- =====================================================
-       CONTEXT MENU
-  ====================================================== -->
-
-  <div
-    id="contextMenu"
-    class="context-menu"
-  >
-
-    <button onclick="contextReply()">
-      ↩ Reply
-    </button>
-
-    <button onclick="contextEdit()">
-      ✏ Edit
-    </button>
-
-    <button onclick="contextCopy()">
-      📋 Copy
-    </button>
-
-    <button onclick="contextReact()">
-      ❤️ Reaction
-    </button>
-
-    <button onclick="contextStar()">
-      ⭐ Star
-    </button>
-
-    <button onclick="contextDelete()">
-      🗑 Delete
-    </button>
-
-  </div>
-
-
-  <!-- =====================================================
-       SETTINGS MODAL
-  ====================================================== -->
-
-  <div
-    id="settingsModal"
-    class="modal-backdrop"
-  >
-
-    <div class="modal">
-
-      <h2>
-        Settings
-      </h2>
-
-      <div class="modal-row">
+      <div class="setting">
         <span>Notifications</span>
-
-        <label class="switch">
-          <input
-            type="checkbox"
-            id="modalNotifications"
-            checked
-          >
-
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="modal-row">
-        <span>Chat sounds</span>
-
-        <label class="switch">
-          <input
-            type="checkbox"
-            id="modalSounds"
-            checked
-          >
-
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="modal-row">
-        <span>Dark mode</span>
-
-        <label class="switch">
-          <input
-            type="checkbox"
-            id="modalDark"
-          >
-
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="modal-row">
-        <span>Save messages on this browser</span>
-
-        <label class="switch">
-          <input
-            type="checkbox"
-            id="modalSave"
-            checked
-          >
-
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="modal-actions">
-
-        <button
-          class="modal-btn"
-          onclick="exportChat()"
-        >
-          Export Chat
+        <button onclick="showToast('Notifications are local only')">
+          INFO
         </button>
+      </div>
 
-        <button
-          class="modal-btn danger"
-          onclick="clearChat()"
-        >
-          Clear Chat
+      <div class="setting">
+        <span>Privacy / Local Storage</span>
+        <button onclick="showStorageInfo()">
+          INFO
         </button>
+      </div>
 
-        <button
-          class="modal-btn secondary"
-          onclick="closeSettings()"
-        >
-          Close
+      <div class="setting">
+        <span>Export Chat</span>
+        <button onclick="exportChat()">
+          EXPORT
         </button>
+      </div>
 
+      <div class="setting">
+        <span>Clear Chat</span>
+        <button onclick="clearChat()">
+          CLEAR
+        </button>
       </div>
 
     </div>
 
   </div>
 
-
-  <!-- =====================================================
-       TOAST
-  ====================================================== -->
-
-  <div
-    id="toast"
-    class="toast"
-  ></div>
+</div>
 
 
-  <script>
+<script>
 
-    /* =====================================================
-       STORAGE
-    ====================================================== */
+/* =========================================================
+   LOCAL CHAT DATABASE
+   ========================================================= */
 
-    const STORAGE_KEY = "whatsapp_local_chat_v2";
-    const SETTINGS_KEY = "whatsapp_local_settings_v2";
+const STORAGE_KEY = "two_person_whatsapp_chat_v1";
+
+let messages = [];
+
+let selectedMessageId = null;
+
+let soundEnabled = true;
 
 
-    /* =====================================================
-       DEFAULT MESSAGES
-    ====================================================== */
+/* =========================================================
+   LOAD
+   ========================================================= */
 
-    let messages = JSON.parse(
-      localStorage.getItem(STORAGE_KEY) || "null"
+function loadMessages(){
+
+  try{
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if(saved){
+      messages = JSON.parse(saved);
+    }
+
+  }catch(error){
+
+    console.log("Could not load messages", error);
+
+    messages = [];
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVE
+   ========================================================= */
+
+function saveMessages(){
+
+  try{
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(messages)
     );
 
-    if (!Array.isArray(messages)) {
+  }catch(error){
 
-      messages = [
+    console.log("Could not save messages", error);
 
-        {
-          id: createId(),
-          from: "uzair",
-          text: "Assalam o Alaikum 👋",
-          time: getTime(),
-          date: todayDate(),
-          reaction: null,
-          starred: false,
-          reply: null
-        },
+  }
 
-        {
-          id: createId(),
-          from: "me",
-          text: "Wa Alaikum Assalam! 😊",
-          time: getTime(),
-          date: todayDate(),
-          reaction: null,
-          starred: false,
-          reply: null
-        },
+}
 
-        {
-          id: createId(),
-          from: "uzair",
-          text: "Kya haal hai?",
-          time: getTime(),
-          date: todayDate(),
-          reaction: null,
-          starred: false,
-          reply: null
-        }
 
-      ];
+/* =========================================================
+   CREATE ID
+   ========================================================= */
 
-      saveMessages();
+function createId(){
+
+  return Date.now().toString() +
+    Math.random().toString(36).substring(2);
+
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+   ========================================================= */
+
+function sendMessage(sender){
+
+  let input;
+
+  if(sender === "me"){
+
+    input = document.getElementById("youInput");
+
+    /* Center input can also send as YOU */
+    const centerInput =
+      document.getElementById("centerInput");
+
+    if(
+      (!input.value.trim()) &&
+      centerInput.value.trim()
+    ){
+      input = centerInput;
     }
 
+  }else{
 
-    /* =====================================================
-       SETTINGS
-    ====================================================== */
+    input = document.getElementById("uzairInput");
 
-    let settings = JSON.parse(
-      localStorage.getItem(SETTINGS_KEY) || "null"
+  }
+
+
+  const text = input.value.trim();
+
+  if(!text){
+
+    showToast("Type a message first");
+
+    input.focus();
+
+    return;
+
+  }
+
+
+  const message = {
+
+    id:createId(),
+
+    sender:sender,
+
+    text:text,
+
+    time:new Date().toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    ),
+
+    timestamp:Date.now(),
+
+    starred:false
+
+  };
+
+
+  messages.push(message);
+
+  saveMessages();
+
+  input.value = "";
+
+  const centerInput =
+    document.getElementById("centerInput");
+
+  if(sender === "me"){
+    centerInput.value = "";
+  }
+
+
+  renderMessages();
+
+  playSound();
+
+  scrollToBottom();
+
+}
+
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function renderMessages(){
+
+  const container =
+    document.getElementById("messages");
+
+  const search =
+    document.getElementById("searchInput")
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  let list = messages;
+
+  if(search){
+
+    list = messages.filter(message =>
+      message.text.toLowerCase().includes(search)
     );
 
-    if (!settings) {
-
-      settings = {
-        sound: true,
-        dark: false,
-        save: true,
-        notifications: true
-      };
-
-      saveSettings();
-    }
+  }
 
 
-    /* =====================================================
-       STATE
-    ====================================================== */
+  if(list.length === 0){
 
-    let activeInput = null;
+    container.innerHTML = `
+      <div class="empty">
+        <div style="font-size:42px">💬</div>
+        <h3>No messages yet</h3>
+        <p>Send a message from YOU or UZAIR.</p>
+      </div>
+    `;
 
-    let selectedMessageId = null;
+    return;
 
-    let replyTarget = null;
-
-    let mediaRecorder = null;
-
-    let audioChunks = [];
-
-    let recordingSide = null;
-
-    let typingTimers = {
-      me: null,
-      uzair: null
-    };
+  }
 
 
-    /* =====================================================
-       HELPERS
-    ====================================================== */
-
-    function createId() {
-      return Date.now() + "_" +
-        Math.random().toString(36).slice(2);
-    }
+  container.innerHTML = "";
 
 
-    function getTime() {
+  list.forEach(message => {
 
-      return new Date().toLocaleTimeString(
-        [],
-        {
-          hour: "2-digit",
-          minute: "2-digit"
-        }
-      );
+    const row =
+      document.createElement("div");
 
-    }
-
-
-    function todayDate() {
-
-      return new Date().toLocaleDateString(
-        [],
-        {
-          year: "numeric",
-          month: "short",
-          day: "numeric"
-        }
-      );
-
-    }
+    row.className =
+      "message-row " +
+      (message.sender === "me"
+        ? "me"
+        : "uzair");
 
 
-    function saveMessages() {
+    const bubble =
+      document.createElement("div");
 
-      if (settings.save) {
-        localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify(messages)
+    bubble.className = "message";
+
+
+    const name =
+      document.createElement("div");
+
+    name.className = "message-name";
+
+    name.textContent =
+      message.sender === "me"
+        ? "YOU"
+        : "UZAIR";
+
+
+    const text =
+      document.createElement("div");
+
+    text.className = "message-text";
+
+    text.textContent = message.text;
+
+
+    const meta =
+      document.createElement("div");
+
+    meta.className = "message-meta";
+
+    meta.textContent =
+      message.time +
+      (message.starred ? "  ⭐" : "");
+
+
+    const tools =
+      document.createElement("div");
+
+    tools.className = "message-tools";
+
+
+    const reply =
+      document.createElement("button");
+
+    reply.textContent = "↩";
+
+    reply.title = "Reply";
+
+    reply.onclick = () =>
+      selectMessage(message.id, "reply");
+
+
+    const edit =
+      document.createElement("button");
+
+    edit.textContent = "✏";
+
+    edit.title = "Edit";
+
+    edit.onclick = () =>
+      selectMessage(message.id, "edit");
+
+
+    const copy =
+      document.createElement("button");
+
+    copy.textContent = "📋";
+
+    copy.title = "Copy";
+
+    copy.onclick = () =>
+      selectMessage(message.id, "copy");
+
+
+    const star =
+      document.createElement("button");
+
+    star.textContent =
+      message.starred ? "★" : "☆";
+
+    star.title = "Star";
+
+    star.onclick = () =>
+      selectMessage(message.id, "star");
+
+
+    const del =
+      document.createElement("button");
+
+    del.textContent = "🗑";
+
+    del.title = "Delete";
+
+    del.onclick = () =>
+      selectMessage(message.id, "delete");
+
+
+    tools.appendChild(reply);
+    tools.appendChild(edit);
+    tools.appendChild(copy);
+    tools.appendChild(star);
+    tools.appendChild(del);
+
+
+    bubble.appendChild(tools);
+    bubble.appendChild(name);
+    bubble.appendChild(text);
+    bubble.appendChild(meta);
+
+
+    row.appendChild(bubble);
+
+    row.addEventListener(
+      "contextmenu",
+      function(event){
+
+        event.preventDefault();
+
+        selectedMessageId = message.id;
+
+        showContextMenu(
+          event.clientX,
+          event.clientY
         );
+
       }
+    );
 
-    }
 
+    container.appendChild(row);
 
-    function saveSettings() {
+  });
 
-      localStorage.setItem(
-        SETTINGS_KEY,
-        JSON.stringify(settings)
-      );
 
-    }
+  scrollToBottom();
 
+}
 
-    function escapeHTML(text) {
 
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+/* =========================================================
+   SCROLL
+   ========================================================= */
 
-    }
+function scrollToBottom(){
 
+  const box =
+    document.getElementById("messages");
 
-    function showToast(text) {
+  setTimeout(() => {
 
-      const toast =
-        document.getElementById("toast");
+    box.scrollTop = box.scrollHeight;
 
-      toast.textContent = text;
+  },30);
 
-      toast.classList.add("show");
+}
 
-      setTimeout(() => {
-        toast.classList.remove("show");
-      }, 1800);
 
-    }
+/* =========================================================
+   SEARCH
+   ========================================================= */
 
+function toggleSearch(){
 
-    /* =====================================================
-       RENDER MESSAGES
-    ====================================================== */
+  const box =
+    document.getElementById("searchBox");
 
-    function renderMessages(list = messages) {
+  box.classList.toggle("show");
 
-      const container =
-        document.getElementById("messages");
-
-      container.innerHTML = "";
-
-      let lastDate = "";
-
-      list.forEach(message => {
-
-        if (message.date !== lastDate) {
-
-          const divider =
-            document.createElement("div");
-
-          divider.className = "date-divider";
-
-          divider.innerHTML =
-            `<span>${escapeHTML(message.date)}</span>`;
-
-          container.appendChild(divider);
-
-          lastDate = message.date;
-        }
-
-
-        const row =
-          document.createElement("div");
-
-        row.className =
-          "message-row " +
-          (message.from === "me"
-            ? "me"
-            : "uzair");
-
-
-        const bubble =
-          document.createElement("div");
-
-        bubble.className = "bubble";
-
-        bubble.dataset.id =
-          message.id;
-
-
-        let html = "";
-
-
-        /* Reply */
-
-        if (message.reply) {
-
-          html += `
-            <div class="reply-preview">
-              <strong>
-                ${message.reply.from === "me"
-                  ? "You"
-                  : "Uzair"}
-              </strong><br>
-              ${escapeHTML(message.reply.text)}
-            </div>
-          `;
-
-        }
-
-
-        /* Text */
-
-        if (message.text) {
-
-          html += `
-            <div class="message-text">
-              ${escapeHTML(message.text)}
-            </div>
-          `;
-
-        }
-
-
-        /* Attachment */
-
-        if (message.attachment) {
-
-          if (
-            message.attachment.type.startsWith("image/")
-          ) {
-
-            html += `
-              <div class="attachment">
-                <img
-                  src="${message.attachment.data}"
-                  alt="Image"
-                >
-                <a
-                  href="${message.attachment.data}"
-                  download="${escapeHTML(message.attachment.name)}"
-                >
-                  📎 ${escapeHTML(message.attachment.name)}
-                </a>
-              </div>
-            `;
-
-          } else if (
-            message.attachment.type.startsWith("audio/")
-          ) {
-
-            html += `
-              <div class="attachment">
-                <audio
-                  class="audio-player"
-                  controls
-                  src="${message.attachment.data}"
-                ></audio>
-              </div>
-            `;
-
-          } else {
-
-            html += `
-              <div class="attachment">
-                📎
-                <a
-                  href="${message.attachment.data}"
-                  download="${escapeHTML(message.attachment.name)}"
-                >
-                  ${escapeHTML(message.attachment.name)}
-                </a>
-              </div>
-            `;
-
-          }
-
-        }
-
-
-        /* Meta */
-
-        html += `
-          <div class="message-meta">
-
-            ${
-              message.starred
-                ? '<span class="star">⭐</span>'
-                : ''
-            }
-
-            <span>
-              ${escapeHTML(message.time)}
-            </span>
-
-            <span class="ticks">
-              ✓✓
-            </span>
-
-          </div>
-        `;
-
-
-        /* Reaction */
-
-        if (message.reaction) {
-
-          html += `
-            <div class="message-reaction">
-              ${message.reaction}
-            </div>
-          `;
-
-        }
-
-
-        bubble.innerHTML = html;
-
-        bubble.addEventListener(
-          "contextmenu",
-          function(e) {
-
-            e.preventDefault();
-
-            selectedMessageId =
-              message.id;
-
-            showContextMenu(
-              e.clientX,
-              e.clientY
-            );
-
-          }
-        );
-
-
-        bubble.addEventListener(
-          "dblclick",
-          function(e) {
-
-            selectedMessageId =
-              message.id;
-
-            showContextMenu(
-              e.clientX,
-              e.clientY
-            );
-
-          }
-        );
-
-
-        row.appendChild(bubble);
-
-        container.appendChild(row);
-
-      });
-
-
-      container.scrollTop =
-        container.scrollHeight;
-
-
-      updateCounts();
-
-    }
-
-
-    /* =====================================================
-       COUNTS
-    ====================================================== */
-
-    function updateCounts() {
-
-      const myCount =
-        messages.filter(
-          m => m.from === "me"
-        ).length;
-
-      const uzairCount =
-        messages.filter(
-          m => m.from === "uzair"
-        ).length;
-
-
-      document.getElementById(
-        "myMessageCount"
-      ).textContent = myCount;
-
-
-      document.getElementById(
-        "uzairMessageCount"
-      ).textContent = uzairCount;
-
-    }
-
-
-    /* =====================================================
-       SEND MESSAGE
-    ====================================================== */
-
-    function sendMessage(from) {
-
-      const input =
-        document.getElementById(
-          from === "me"
-            ? "myInput"
-            : "uzairInput"
-        );
-
-      const text =
-        input.value.trim();
-
-
-      if (!text) {
-        return;
-      }
-
-
-      const message = {
-
-        id: createId(),
-
-        from: from,
-
-        text: text,
-
-        time: getTime(),
-
-        date: todayDate(),
-
-        reaction: null,
-
-        starred: false,
-
-        reply: replyTarget
-          ? {
-              from: replyTarget.from,
-              text: replyTarget.text
-            }
-          : null
-
-      };
-
-
-      messages.push(message);
-
-      saveMessages();
-
-      input.value = "";
-
-      cancelReply();
-
-      renderMessages();
-
-      playSound();
-
-      setTyping(from, false);
-
-    }
-
-
-    /* =====================================================
-       ENTER TO SEND
-    ====================================================== */
+  if(box.classList.contains("show")){
 
     document
-      .getElementById("myInput")
-      .addEventListener(
-        "keydown",
-        e => {
+      .getElementById("searchInput")
+      .focus();
 
-          if (
-            e.key === "Enter" &&
-            !e.shiftKey
-          ) {
+  }
 
-            e.preventDefault();
-
-            sendMessage("me");
-
-          }
-
-        }
-      );
+}
 
 
-    document
-      .getElementById("uzairInput")
-      .addEventListener(
-        "keydown",
-        e => {
+/* =========================================================
+   EMOJI
+   ========================================================= */
 
-          if (
-            e.key === "Enter" &&
-            !e.shiftKey
-          ) {
+const emojiList = [
 
-            e.preventDefault();
+  "😀","😃","😄","😁","😆","😅",
+  "😂","🤣","😊","😇","🙂","🙃",
+  "😉","😌","😍","🥰","😘","😗",
+  "😙","😚","😋","😛","😝","😜",
+  "🤪","🤨","🧐","🤓","😎","🤩",
+  "🥳","😏","😒","😞","😔","😟",
+  "😕","🙁","☹️","😣","😖","😫",
+  "😩","🥺","😢","😭","😤","😠",
+  "😡","🤬","🤯","😳","🥵","🥶",
+  "😱","😨","😰","😥","😓","🤗",
+  "🤔","🤭","🤫","🤥","😶","😐",
+  "😑","😬","🙄","😯","😦","😧",
+  "😮","😲","🥱","😴","🤤","😪",
+  "😵","🤐","🥴","🤢","🤮","🤧",
+  "😷","🤒","🤕","🤑","🤠","👍",
+  "👎","👏","🙌","🙏","❤️","🧡",
+  "💛","💚","💙","💜","🖤","🤍",
+  "💯","🔥","✨","🎉","💀","👀",
+  "💔","💖","💗","💓","💘","💝"
 
-            sendMessage("uzair");
-
-          }
-
-        }
-      );
-
-
-    /* =====================================================
-       TYPING STATUS
-    ====================================================== */
-
-    function setupTyping(inputId, side) {
-
-      document
-        .getElementById(inputId)
-        .addEventListener(
-          "input",
-          function() {
-
-            setTyping(side, true);
-
-            clearTimeout(
-              typingTimers[side]
-            );
-
-            typingTimers[side] =
-              setTimeout(
-                () => setTyping(side, false),
-                900
-              );
-
-          }
-        );
-
-    }
+];
 
 
-    function setTyping(side, typing) {
+function buildEmojiPanel(id){
 
-      const element =
-        document.getElementById(
-          side === "me"
-            ? "myStatus"
-            : "uzairStatus"
-        );
+  const panel =
+    document.getElementById(id);
+
+  panel.innerHTML = "";
+
+  emojiList.forEach(emoji => {
+
+    const span =
+      document.createElement("span");
+
+    span.className = "emoji";
+
+    span.textContent = emoji;
+
+    span.onclick = () =>
+      insertEmoji(id, emoji);
+
+    panel.appendChild(span);
+
+  });
+
+}
 
 
-      element.textContent =
-        typing
-          ? "typing..."
-          : "online";
+function toggleEmoji(id){
 
+  const panel =
+    document.getElementById(id);
 
-      if (side === "uzair") {
+  document
+    .querySelectorAll(".emoji-panel")
+    .forEach(p => {
 
-        document.getElementById(
-          "centerStatus"
-        ).textContent =
-          typing
-            ? "Uzair is typing..."
-            : "Conversation open";
-
+      if(p.id !== id){
+        p.classList.remove("show");
       }
-
-    }
-
-
-    setupTyping("myInput", "me");
-
-    setupTyping("uzairInput", "uzair");
-
-
-    /* =====================================================
-       EMOJI
-    ====================================================== */
-
-    const emojis = [
-      "😀","😃","😄","😁","😆","😅",
-      "😂","🤣","😊","😇","🙂","🙃",
-      "😉","😌","😍","🥰","😘","😗",
-      "😎","🤩","🤔","😐","😑","😶",
-      "🙄","😏","😣","😥","😮","🤐",
-      "😯","😪","😫","🥱","😴","😌",
-      "🤗","🤭","🤫","🤥","😶‍🌫️",
-      "😱","😨","😰","😢","😭","😤",
-      "😡","🤬","❤️","🧡","💛","💚",
-      "💙","💜","🖤","🤍","💯","🔥",
-      "👍","👎","👏","🙏","🤝","👌",
-      "✌️","🤞","💪","🎉","🎊","✨",
-      "⭐","💔","😂","🤣","😅","🥳"
-    ];
-
-
-    const emojiPanel =
-      document.getElementById(
-        "emojiPanel"
-      );
-
-
-    emojis.forEach(emoji => {
-
-      const button =
-        document.createElement("button");
-
-      button.className = "emoji";
-
-      button.textContent = emoji;
-
-      button.onclick = () => {
-
-        if (!activeInput) return;
-
-        activeInput.value += emoji;
-
-        activeInput.focus();
-
-      };
-
-      emojiPanel.appendChild(button);
 
     });
 
+  panel.classList.toggle("show");
 
-    function showEmoji(button, inputId) {
-
-      activeInput =
-        document.getElementById(inputId);
+}
 
 
-      const rect =
-        button.getBoundingClientRect();
+function insertEmoji(panelId, emoji){
+
+  let input;
+
+  if(panelId === "youEmoji"){
+
+    input =
+      document.getElementById("youInput");
+
+  }else if(panelId === "uzairEmoji"){
+
+    input =
+      document.getElementById("uzairInput");
+
+  }else{
+
+    input =
+      document.getElementById("centerInput");
+
+  }
 
 
-      emojiPanel.style.display = "block";
+  input.value += emoji;
+
+  input.focus();
+
+}
 
 
-      const width =
-        emojiPanel.offsetWidth;
+/* =========================================================
+   FILE ATTACHMENT
+   ========================================================= */
+
+function attachFile(event){
+
+  const file =
+    event.target.files[0];
+
+  if(!file) return;
 
 
-      let left =
-        rect.left;
+  if(file.size > 2 * 1024 * 1024){
+
+    showToast("File must be smaller than 2 MB");
+
+    event.target.value = "";
+
+    return;
+
+  }
 
 
-      if (
-        left + width >
-        window.innerWidth - 10
-      ) {
-
-        left =
-          window.innerWidth -
-          width -
-          10;
-
-      }
+  const reader =
+    new FileReader();
 
 
-      emojiPanel.style.left =
-        left + "px";
+  reader.onload = function(){
 
+    const message = {
 
-      emojiPanel.style.bottom =
-        (window.innerHeight -
-          rect.top +
-          8) + "px";
+      id:createId(),
 
-    }
+      sender:"me",
 
+      text:"📎 " + file.name,
 
-    document.addEventListener(
-      "click",
-      e => {
+      fileName:file.name,
 
-        if (
-          !e.target.closest(".emoji-panel") &&
-          !e.target.closest(".icon-btn")
-        ) {
+      fileType:file.type,
 
-          emojiPanel.style.display =
-            "none";
+      fileData:reader.result,
 
+      time:new Date().toLocaleTimeString(
+        [],
+        {
+          hour:"2-digit",
+          minute:"2-digit"
         }
+      ),
 
-      }
-    );
+      timestamp:Date.now(),
 
+      starred:false
 
-    /* =====================================================
-       ATTACHMENTS
-    ====================================================== */
+    };
 
-    function openFile(id) {
 
-      document
-        .getElementById(id)
-        .click();
+    messages.push(message);
 
-    }
-
-
-    function handleFile(input, from) {
-
-      const file =
-        input.files[0];
-
-
-      if (!file) return;
-
-
-      if (file.size > 3 * 1024 * 1024) {
-
-        showToast(
-          "File is too large. Max 3 MB."
-        );
-
-        input.value = "";
-
-        return;
-
-      }
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload = function(e) {
-
-        messages.push({
-
-          id: createId(),
-
-          from: from,
-
-          text: "",
-
-          time: getTime(),
-
-          date: todayDate(),
-
-          reaction: null,
-
-          starred: false,
-
-          reply: null,
-
-          attachment: {
-
-            name: file.name,
-
-            type: file.type ||
-              "application/octet-stream",
-
-            data: e.target.result
-
-          }
-
-        });
-
-
-        saveMessages();
-
-        renderMessages();
-
-        playSound();
-
-        input.value = "";
-
-      };
-
-
-      reader.readAsDataURL(file);
-
-    }
-
-
-    /* =====================================================
-       VOICE RECORDING
-    ====================================================== */
-
-    async function toggleRecording(side) {
-
-      const mic =
-        document.getElementById(
-          side === "me"
-            ? "myMic"
-            : "uzairMic"
-        );
-
-
-      if (
-        mediaRecorder &&
-        mediaRecorder.state === "recording"
-      ) {
-
-        mediaRecorder.stop();
-
-        mic.classList.remove(
-          "recording"
-        );
-
-        return;
-
-      }
-
-
-      if (!navigator.mediaDevices) {
-
-        showToast(
-          "Microphone is not available here."
-        );
-
-        return;
-
-      }
-
-
-      try {
-
-        const stream =
-          await navigator.mediaDevices
-            .getUserMedia({
-              audio: true
-            });
-
-
-        mediaRecorder =
-          new MediaRecorder(stream);
-
-        audioChunks = [];
-
-        recordingSide = side;
-
-
-        mediaRecorder.ondataavailable =
-          event => {
-
-            if (event.data.size > 0) {
-              audioChunks.push(
-                event.data
-              );
-            }
-
-          };
-
-
-        mediaRecorder.onstop = () => {
-
-          const blob =
-            new Blob(
-              audioChunks,
-              { type: "audio/webm" }
-            );
-
-
-          const reader =
-            new FileReader();
-
-
-          reader.onloadend = () => {
-
-            messages.push({
-
-              id: createId(),
-
-              from: recordingSide,
-
-              text: "",
-
-              time: getTime(),
-
-              date: todayDate(),
-
-              reaction: null,
-
-              starred: false,
-
-              reply: null,
-
-              attachment: {
-
-                name:
-                  "voice-message.webm",
-
-                type:
-                  "audio/webm",
-
-                data:
-                  reader.result
-
-              }
-
-            });
-
-
-            saveMessages();
-
-            renderMessages();
-
-            playSound();
-
-          };
-
-
-          reader.readAsDataURL(blob);
-
-
-          stream
-            .getTracks()
-            .forEach(
-              track => track.stop()
-            );
-
-        };
-
-
-        mediaRecorder.start();
-
-        mic.classList.add(
-          "recording"
-        );
-
-        showToast(
-          "Recording... click mic again to stop."
-        );
-
-      } catch (error) {
-
-        showToast(
-          "Microphone permission was denied."
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       CONTEXT MENU
-    ====================================================== */
-
-    const contextMenu =
-      document.getElementById(
-        "contextMenu"
-      );
-
-
-    function showContextMenu(x, y) {
-
-      contextMenu.style.display =
-        "block";
-
-      contextMenu.style.left =
-        Math.min(
-          x,
-          window.innerWidth - 170
-        ) + "px";
-
-      contextMenu.style.top =
-        Math.min(
-          y,
-          window.innerHeight - 250
-        ) + "px";
-
-    }
-
-
-    function hideContextMenu() {
-
-      contextMenu.style.display =
-        "none";
-
-    }
-
-
-    document.addEventListener(
-      "click",
-      e => {
-
-        if (
-          !e.target.closest(".context-menu")
-        ) {
-
-          hideContextMenu();
-
-        }
-
-      }
-    );
-
-
-    function getSelectedMessage() {
-
-      return messages.find(
-        m => m.id === selectedMessageId
-      );
-
-    }
-
-
-    /* =====================================================
-       REPLY
-    ====================================================== */
-
-    function contextReply() {
-
-      const message =
-        getSelectedMessage();
-
-      if (!message) return;
-
-
-      replyTarget = message;
-
-
-      document.getElementById(
-        "myReplyText"
-      ).innerHTML =
-        `Replying to ${
-          message.from === "me"
-            ? "You"
-            : "Uzair"
-        }: ${escapeHTML(message.text || "Attachment")}`;
-
-
-      document.getElementById(
-        "uzairReplyText"
-      ).innerHTML =
-        `Replying to ${
-          message.from === "me"
-            ? "You"
-            : "Uzair"
-        }: ${escapeHTML(message.text || "Attachment")}`;
-
-
-      document.getElementById(
-        "myReplyBar"
-      ).style.display = "block";
-
-
-      document.getElementById(
-        "uzairReplyBar"
-      ).style.display = "block";
-
-
-      document
-        .getElementById(
-          message.from === "me"
-            ? "myInput"
-            : "uzairInput"
-        )
-        .focus();
-
-
-      hideContextMenu();
-
-    }
-
-
-    function cancelReply() {
-
-      replyTarget = null;
-
-      document.getElementById(
-        "myReplyBar"
-      ).style.display = "none";
-
-      document.getElementById(
-        "uzairReplyBar"
-      ).style.display = "none";
-
-    }
-
-
-    /* =====================================================
-       EDIT
-    ====================================================== */
-
-    function contextEdit() {
-
-      const message =
-        getSelectedMessage();
-
-      if (!message) return;
-
-
-      if (!message.text) {
-
-        showToast(
-          "This message cannot be edited."
-        );
-
-        hideContextMenu();
-
-        return;
-
-      }
-
-
-      const newText =
-        prompt(
-          "Edit message:",
-          message.text
-        );
-
-
-      if (
-        newText !== null &&
-        newText.trim()
-      ) {
-
-        message.text =
-          newText.trim();
-
-        saveMessages();
-
-        renderMessages();
-
-      }
-
-
-      hideContextMenu();
-
-    }
-
-
-    /* =====================================================
-       COPY
-    ====================================================== */
-
-    async function contextCopy() {
-
-      const message =
-        getSelectedMessage();
-
-      if (!message) return;
-
-
-      const text =
-        message.text ||
-        message.attachment?.name ||
-        "";
-
-
-      try {
-
-        await navigator.clipboard.writeText(
-          text
-        );
-
-        showToast(
-          "Message copied."
-        );
-
-      } catch {
-
-        showToast(
-          "Copy is not available."
-        );
-
-      }
-
-
-      hideContextMenu();
-
-    }
-
-
-    /* =====================================================
-       REACTION
-    ====================================================== */
-
-    function contextReact() {
-
-      const message =
-        getSelectedMessage();
-
-      if (!message) return;
-
-
-      message.reaction =
-        message.reaction
-          ? null
-          : "❤️";
-
-
-      saveMessages();
-
-      renderMessages();
-
-      hideContextMenu();
-
-    }
-
-
-    /* =====================================================
-       STAR
-    ====================================================== */
-
-    function contextStar() {
-
-      const message =
-        getSelectedMessage();
-
-      if (!message) return;
-
-
-      message.starred =
-        !message.starred;
-
-
-      saveMessages();
-
-      renderMessages();
-
-      hideContextMenu();
-
-    }
-
-
-    /* =====================================================
-       DELETE
-    ====================================================== */
-
-    function contextDelete() {
-
-      const message =
-        getSelectedMessage();
-
-      if (!message) return;
-
-
-      if (
-        confirm(
-          "Delete this message?"
-        )
-      ) {
-
-        messages =
-          messages.filter(
-            m => m.id !== selectedMessageId
-          );
-
-
-        saveMessages();
-
-        renderMessages();
-
-      }
-
-
-      hideContextMenu();
-
-    }
-
-
-    /* =====================================================
-       SEARCH
-    ====================================================== */
-
-    function toggleSearch() {
-
-      const panel =
-        document.getElementById(
-          "searchPanel"
-        );
-
-
-      const visible =
-        panel.style.display === "block";
-
-
-      panel.style.display =
-        visible
-          ? "none"
-          : "block";
-
-
-      if (!visible) {
-
-        document
-          .getElementById(
-            "searchInput"
-          )
-          .focus();
-
-      } else {
-
-        renderMessages();
-
-      }
-
-    }
-
-
-    function searchMessages() {
-
-      const value =
-        document
-          .getElementById(
-            "searchInput"
-          )
-          .value
-          .trim()
-          .toLowerCase();
-
-
-      if (!value) {
-
-        renderMessages();
-
-        return;
-
-      }
-
-
-      const filtered =
-        messages.filter(
-          message =>
-            (
-              message.text || ""
-            )
-            .toLowerCase()
-            .includes(value)
-        );
-
-
-      renderMessages(filtered);
-
-    }
-
-
-    /* =====================================================
-       SETTINGS
-    ====================================================== */
-
-    function openSettings() {
-
-      document.getElementById(
-        "settingsModal"
-      ).style.display = "flex";
-
-
-      syncSettingsUI();
-
-    }
-
-
-    function closeSettings() {
-
-      document.getElementById(
-        "settingsModal"
-      ).style.display = "none";
-
-    }
-
-
-    function syncSettingsUI() {
-
-      document.getElementById(
-        "soundToggle"
-      ).checked =
-        settings.sound;
-
-
-      document.getElementById(
-        "uzairSoundToggle"
-      ).checked =
-        settings.sound;
-
-
-      document.getElementById(
-        "darkToggle"
-      ).checked =
-        settings.dark;
-
-
-      document.getElementById(
-        "uzairDarkToggle"
-      ).checked =
-        settings.dark;
-
-
-      document.getElementById(
-        "saveToggle"
-      ).checked =
-        settings.save;
-
-
-      document.getElementById(
-        "notificationToggle"
-      ).checked =
-        settings.notifications;
-
-
-      document.getElementById(
-        "modalSounds"
-      ).checked =
-        settings.sound;
-
-
-      document.getElementById(
-        "modalDark"
-      ).checked =
-        settings.dark;
-
-
-      document.getElementById(
-        "modalSave"
-      ).checked =
-        settings.save;
-
-
-      document.getElementById(
-        "modalNotifications"
-      ).checked =
-        settings.notifications;
-
-    }
-
-
-    function applySettings() {
-
-      document.body.classList.toggle(
-        "dark",
-        settings.dark
-      );
-
-
-      syncSettingsUI();
-
-    }
-
-
-    document
-      .getElementById("soundToggle")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.sound =
-            e.target.checked;
-
-          saveSettings();
-
-          syncSettingsUI();
-
-        }
-      );
-
-
-    document
-      .getElementById("uzairSoundToggle")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.sound =
-            e.target.checked;
-
-          saveSettings();
-
-          syncSettingsUI();
-
-        }
-      );
-
-
-    document
-      .getElementById("darkToggle")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.dark =
-            e.target.checked;
-
-          saveSettings();
-
-          applySettings();
-
-        }
-      );
-
-
-    document
-      .getElementById("uzairDarkToggle")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.dark =
-            e.target.checked;
-
-          saveSettings();
-
-          applySettings();
-
-        }
-      );
-
-
-    document
-      .getElementById("saveToggle")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.save =
-            e.target.checked;
-
-          saveSettings();
-
-          if (settings.save) {
-            saveMessages();
-          }
-
-        }
-      );
-
-
-    document
-      .getElementById("notificationToggle")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.notifications =
-            e.target.checked;
-
-          saveSettings();
-
-        }
-      );
-
-
-    document
-      .getElementById("modalSounds")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.sound =
-            e.target.checked;
-
-          saveSettings();
-
-          syncSettingsUI();
-
-        }
-      );
-
-
-    document
-      .getElementById("modalDark")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.dark =
-            e.target.checked;
-
-          saveSettings();
-
-          applySettings();
-
-        }
-      );
-
-
-    document
-      .getElementById("modalSave")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.save =
-            e.target.checked;
-
-          saveSettings();
-
-          if (settings.save) {
-            saveMessages();
-          }
-
-        }
-      );
-
-
-    document
-      .getElementById("modalNotifications")
-      .addEventListener(
-        "change",
-        e => {
-
-          settings.notifications =
-            e.target.checked;
-
-          saveSettings();
-
-        }
-      );
-
-
-    /* =====================================================
-       EXPORT CHAT
-    ====================================================== */
-
-    function exportChat() {
-
-      const data =
-        JSON.stringify(
-          messages,
-          null,
-          2
-        );
-
-
-      const blob =
-        new Blob(
-          [data],
-          {
-            type: "application/json"
-          }
-        );
-
-
-      const url =
-        URL.createObjectURL(blob);
-
-
-      const a =
-        document.createElement("a");
-
-
-      a.href = url;
-
-      a.download =
-        "you-uzair-chat.json";
-
-
-      a.click();
-
-
-      URL.revokeObjectURL(url);
-
-
-      showToast(
-        "Chat exported."
-      );
-
-    }
-
-
-    /* =====================================================
-       CLEAR CHAT
-    ====================================================== */
-
-    function clearChat() {
-
-      if (
-        !confirm(
-          "Are you sure you want to clear the complete chat?"
-        )
-      ) {
-        return;
-      }
-
-
-      messages = [];
-
-      saveMessages();
-
-      renderMessages();
-
-      showToast(
-        "Chat cleared."
-      );
-
-    }
-
-
-    /* =====================================================
-       SOUND
-    ====================================================== */
-
-    function playSound() {
-
-      if (!settings.sound) {
-        return;
-      }
-
-
-      try {
-
-        const AudioContext =
-          window.AudioContext ||
-          window.webkitAudioContext;
-
-
-        if (!AudioContext) return;
-
-
-        const ctx =
-          new AudioContext();
-
-
-        const oscillator =
-          ctx.createOscillator();
-
-
-        const gain =
-          ctx.createGain();
-
-
-        oscillator.frequency.value =
-          700;
-
-
-        oscillator.type =
-          "sine";
-
-
-        gain.gain.setValueAtTime(
-          0.0001,
-          ctx.currentTime
-        );
-
-
-        gain.gain.exponentialRampToValueAtTime(
-          0.04,
-          ctx.currentTime + .01
-        );
-
-
-        gain.gain.exponentialRampToValueAtTime(
-          0.0001,
-          ctx.currentTime + .08
-        );
-
-
-        oscillator.connect(gain);
-
-        gain.connect(ctx.destination);
-
-        oscillator.start();
-
-        oscillator.stop(
-          ctx.currentTime + .08
-        );
-
-      } catch {
-
-        // Sound is optional.
-
-      }
-
-    }
-
-
-    /* =====================================================
-       CLOSE MODAL WHEN CLICKING OUTSIDE
-    ====================================================== */
-
-    document
-      .getElementById("settingsModal")
-      .addEventListener(
-        "click",
-        e => {
-
-          if (
-            e.target.id ===
-            "settingsModal"
-          ) {
-
-            closeSettings();
-
-          }
-
-        }
-      );
-
-
-    /* =====================================================
-       INITIAL LOAD
-    ====================================================== */
-
-    applySettings();
+    saveMessages();
 
     renderMessages();
 
-  </script>
+    scrollToBottom();
+
+    showToast("Attachment added");
+
+  };
+
+
+  reader.readAsDataURL(file);
+
+  event.target.value = "";
+
+}
+
+
+/* =========================================================
+   CONTEXT MENU
+   ========================================================= */
+
+function showContextMenu(x,y){
+
+  const menu =
+    document.getElementById("contextMenu");
+
+  menu.style.left =
+    Math.min(x,window.innerWidth - 170) + "px";
+
+  menu.style.top =
+    Math.min(y,window.innerHeight - 220) + "px";
+
+  menu.classList.add("show");
+
+}
+
+
+document.addEventListener("click", function(event){
+
+  const menu =
+    document.getElementById("contextMenu");
+
+  if(!menu.contains(event.target)){
+
+    menu.classList.remove("show");
+
+  }
+
+});
+
+
+function selectMessage(id,action){
+
+  selectedMessageId = id;
+
+  document
+    .getElementById("contextMenu")
+    .classList.remove("show");
+
+
+  if(action === "reply"){
+    replyMessage();
+  }
+
+  if(action === "edit"){
+    editMessage();
+  }
+
+  if(action === "copy"){
+    copyMessage();
+  }
+
+  if(action === "star"){
+    toggleStar();
+  }
+
+  if(action === "delete"){
+    deleteMessage();
+  }
+
+}
+
+
+function getSelectedMessage(){
+
+  return messages.find(
+    message => message.id === selectedMessageId
+  );
+
+}
+
+
+/* =========================================================
+   REPLY
+   ========================================================= */
+
+function replyMessage(){
+
+  const message =
+    getSelectedMessage();
+
+  if(!message) return;
+
+  const input =
+    document.getElementById("centerInput");
+
+  input.value =
+    "↩ " +
+    (message.sender === "me"
+      ? "YOU"
+      : "UZAIR") +
+    ": " +
+    message.text +
+    "\n";
+
+  input.focus();
+
+}
+
+
+/* =========================================================
+   EDIT
+   ========================================================= */
+
+function editMessage(){
+
+  const message =
+    getSelectedMessage();
+
+  if(!message) return;
+
+
+  const newText =
+    prompt(
+      "Edit message:",
+      message.text
+    );
+
+
+  if(newText === null) return;
+
+  if(!newText.trim()) return;
+
+
+  message.text =
+    newText.trim();
+
+  saveMessages();
+
+  renderMessages();
+
+}
+
+
+/* =========================================================
+   COPY
+   ========================================================= */
+
+async function copyMessage(){
+
+  const message =
+    getSelectedMessage();
+
+  if(!message) return;
+
+
+  try{
+
+    await navigator.clipboard.writeText(
+      message.text
+    );
+
+    showToast("Message copied");
+
+  }catch{
+
+    showToast("Copy is not available");
+
+  }
+
+}
+
+
+/* =========================================================
+   STAR
+   ========================================================= */
+
+function toggleStar(){
+
+  const message =
+    getSelectedMessage();
+
+  if(!message) return;
+
+
+  message.starred =
+    !message.starred;
+
+  saveMessages();
+
+  renderMessages();
+
+}
+
+
+/* =========================================================
+   DELETE
+   ========================================================= */
+
+function deleteMessage(){
+
+  const message =
+    getSelectedMessage();
+
+  if(!message) return;
+
+
+  if(!confirm("Delete this message?")) return;
+
+
+  messages =
+    messages.filter(
+      item => item.id !== message.id
+    );
+
+
+  saveMessages();
+
+  renderMessages();
+
+}
+
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+function toggleDark(){
+
+  document.body.classList.toggle("dark");
+
+  localStorage.setItem(
+    "chat_dark_mode",
+    document.body.classList.contains("dark")
+      ? "1"
+      : "0"
+  );
+
+}
+
+
+/* =========================================================
+   SOUND
+   ========================================================= */
+
+function playSound(){
+
+  if(!soundEnabled) return;
+
+
+  try{
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if(!AudioContext) return;
+
+
+    const audio =
+      new AudioContext();
+
+    const oscillator =
+      audio.createOscillator();
+
+    const gain =
+      audio.createGain();
+
+
+    oscillator.frequency.value = 700;
+
+    gain.gain.value = 0.04;
+
+
+    oscillator.connect(gain);
+
+    gain.connect(audio.destination);
+
+
+    oscillator.start();
+
+    oscillator.stop(
+      audio.currentTime + 0.08
+    );
+
+  }catch{
+
+    /* Ignore audio errors */
+
+  }
+
+}
+
+
+function toggleSound(){
+
+  soundEnabled =
+    !soundEnabled;
+
+  document.getElementById(
+    "soundBtn"
+  ).textContent =
+    soundEnabled ? "ON" : "OFF";
+
+}
+
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+function openSettings(){
+
+  document
+    .getElementById("settingsModal")
+    .classList.add("show");
+
+}
+
+
+function closeSettings(){
+
+  document
+    .getElementById("settingsModal")
+    .classList.remove("show");
+
+}
+
+
+function showStorageInfo(){
+
+  showToast(
+    "Messages are stored only in this browser."
+  );
+
+}
+
+
+function showProfile(name){
+
+  showToast(
+    name + " profile"
+  );
+
+}
+
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+
+function exportChat(){
+
+  if(messages.length === 0){
+
+    showToast("No messages to export");
+
+    return;
+
+  }
+
+
+  const data =
+    JSON.stringify(
+      messages,
+      null,
+      2
+    );
+
+
+  const blob =
+    new Blob(
+      [data],
+      {
+        type:"application/json"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "chat-export.json";
+
+  a.click();
+
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+/* =========================================================
+   CLEAR
+   ========================================================= */
+
+function clearChat(){
+
+  if(messages.length === 0){
+
+    showToast("Chat is already empty");
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      "Are you sure you want to clear the entire chat?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  messages = [];
+
+  saveMessages();
+
+  renderMessages();
+
+  showToast("Chat cleared");
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer;
+
+function showToast(text){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = text;
+
+  toast.classList.add("show");
+
+
+  clearTimeout(toastTimer);
+
+
+  toastTimer =
+    setTimeout(() => {
+
+      toast.classList.remove("show");
+
+    },2200);
+
+}
+
+
+/* =========================================================
+   ENTER TO SEND
+   ========================================================= */
+
+document
+  .getElementById("youInput")
+  .addEventListener("keydown",function(event){
+
+    if(event.key === "Enter" && !event.shiftKey){
+
+      event.preventDefault();
+
+      sendMessage("me");
+
+    }
+
+  });
+
+
+document
+  .getElementById("uzairInput")
+  .addEventListener("keydown",function(event){
+
+    if(event.key === "Enter" && !event.shiftKey){
+
+      event.preventDefault();
+
+      sendMessage("uzair");
+
+    }
+
+  });
+
+
+document
+  .getElementById("centerInput")
+  .addEventListener("keydown",function(event){
+
+    if(event.key === "Enter"){
+
+      event.preventDefault();
+
+      sendMessage("me");
+
+    }
+
+  });
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+loadMessages();
+
+buildEmojiPanel("youEmoji");
+
+buildEmojiPanel("uzairEmoji");
+
+buildEmojiPanel("centerEmoji");
+
+
+if(
+  localStorage.getItem("chat_dark_mode") === "1"
+){
+
+  document.body.classList.add("dark");
+
+}
+
+
+renderMessages();
+
+
+/* Close emoji panels when clicking elsewhere */
+
+document.addEventListener("click",function(event){
+
+  if(
+    !event.target.closest(".emoji-btn") &&
+    !event.target.closest(".emoji-panel")
+  ){
+
+    document
+      .querySelectorAll(".emoji-panel")
+      .forEach(panel =>
+        panel.classList.remove("show")
+      );
+
+  }
+
+});
+
+</script>
 
 </body>
 </html>
