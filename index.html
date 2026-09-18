@@ -1,1763 +1,3316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat — You & Uzair</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-*{box-sizing:border-box}
-:root{
-  --green:#00a884;
-  --green-dark:#008f72;
-  --light:#f0f2f5;
-  --wall:#efeae2;
-  --white:#fff;
-  --text:#111b21;
-  --muted:#667781;
-  --border:#d9dee2;
-  --my:#fff;
-  --uzair:#d9fdd3;
-}
-body.dark{
-  --light:#202c33;
-  --wall:#111b21;
-  --white:#202c33;
-  --text:#e9edef;
-  --muted:#aebac1;
-  --border:#344047;
-  --my:#202c33;
-  --uzair:#005c4b;
-}
-*{scrollbar-width:thin}
-body{
-  margin:0;
-  height:100vh;
-  overflow:hidden;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#d9dbd5;
-  color:var(--text);
-}
-button,input{font:inherit}
+  <title>WhatsApp - You & Uzair</title>
 
-.app{
-  height:100vh;
-  display:grid;
-  grid-template-columns:280px minmax(400px,1fr) 280px;
-}
+  <!-- Your logo -->
+  <link rel="icon" type="image/png" href="whatsapp.png">
 
-/* SIDEBARS */
-.sidebar{
-  background:var(--white);
-  overflow:hidden;
-  border-right:1px solid var(--border);
-}
-.right-sidebar{
-  border-right:0;
-  border-left:1px solid var(--border);
-}
-.sidebar-header,
-.chat-header{
-  height:65px;
-  background:var(--light);
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:10px 16px;
-}
-.avatar{
-  width:43px;
-  height:43px;
-  border-radius:50%;
-  background:var(--green);
-  color:#fff;
-  display:grid;
-  place-items:center;
-  font-weight:bold;
-  flex:none;
-}
-.avatar.big{
-  width:88px;
-  height:88px;
-  font-size:30px;
-}
-.search{
-  padding:10px;
-  border-bottom:1px solid var(--border);
-}
-.search input{
-  width:100%;
-  border:0;
-  outline:none;
-  padding:11px 14px;
-  border-radius:9px;
-  background:var(--light);
-  color:var(--text);
-}
-.profile{
-  text-align:center;
-  padding:22px 10px;
-  border-bottom:1px solid var(--border);
-}
-.profile h2{
-  margin:10px 0 4px;
-  font-size:19px;
-}
-.muted{
-  color:var(--muted);
-  font-size:13px;
-}
-.section{
-  padding:18px;
-  border-bottom:1px solid var(--border);
-}
-.section-title{
-  color:var(--muted);
-  font-size:12px;
-  text-transform:uppercase;
-  margin-bottom:12px;
-}
-.contact{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px;
-  border-radius:9px;
-  cursor:pointer;
-}
-.contact:hover{
-  background:var(--light);
-}
-.action{
-  padding:12px 5px;
-  cursor:pointer;
-  border-radius:7px;
-}
-.action:hover{
-  background:var(--light);
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* MAIN */
-.chat{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  background:var(--wall);
-}
-.chat-title{
-  flex:1;
-}
-.chat-title strong{
-  display:block;
-}
-.status{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:3px;
-}
-.online{
-  color:var(--green);
-}
-.typing{
-  color:var(--green);
-  display:none;
-}
-.header-buttons{
-  display:flex;
-  gap:4px;
-}
-.icon-btn{
-  width:40px;
-  height:40px;
-  border:0;
-  border-radius:50%;
-  background:transparent;
-  color:var(--text);
-  cursor:pointer;
-  font-size:20px;
-}
-.icon-btn:hover{
-  background:#0001;
-}
+    :root {
+      --green: #25d366;
+      --green-dark: #128c7e;
+      --light-green: #dcf8c6;
+      --bg: #efeae2;
+      --panel: #f7f9fa;
+      --white: #ffffff;
+      --text: #17202a;
+      --muted: #667781;
+      --border: #d9e0e3;
+      --danger: #e53935;
+      --shadow: 0 8px 30px rgba(0,0,0,.08);
+    }
 
-/* MESSAGES */
-.messages{
-  flex:1;
-  overflow-y:auto;
-  padding:20px 7%;
-  background-color:var(--wall);
-  background-image:
-    radial-gradient(#d4d0c9 1px,transparent 1px);
-  background-size:18px 18px;
-}
-.day{
-  text-align:center;
-  margin:8px 0 18px;
-}
-.day span{
-  background:var(--white);
-  color:var(--muted);
-  padding:6px 12px;
-  border-radius:8px;
-  font-size:11px;
-  box-shadow:0 1px 2px #0001;
-}
-.row{
-  display:flex;
-  margin:5px 0;
-}
-.row.me{
-  justify-content:flex-start;
-}
-.row.uzair{
-  justify-content:flex-end;
-}
-.bubble{
-  position:relative;
-  max-width:min(68%,550px);
-  padding:8px 10px;
-  border-radius:8px;
-  box-shadow:0 1px 1px #0002;
-  line-height:1.45;
-  word-break:break-word;
-}
-.me .bubble{
-  background:var(--my);
-  border-top-left-radius:2px;
-}
-.uzair .bubble{
-  background:var(--uzair);
-  border-top-right-radius:2px;
-}
-.meta{
-  float:right;
-  margin:7px 0 0 10px;
-  color:var(--muted);
-  font-size:10px;
-}
-.ticks{
-  color:#53bdeb;
-}
-.message-image{
-  display:block;
-  max-width:300px;
-  max-height:280px;
-  border-radius:7px;
-  margin-bottom:5px;
-}
-.message-file{
-  display:inline-flex;
-  gap:8px;
-  align-items:center;
-  padding:8px;
-  border-radius:7px;
-  background:#0000000b;
-  margin-bottom:5px;
-}
-.reply-preview{
-  border-left:3px solid var(--green);
-  background:#0000000c;
-  padding:5px 8px;
-  border-radius:4px;
-  margin-bottom:7px;
-  font-size:12px;
-}
-.reaction{
-  position:absolute;
-  bottom:-12px;
-  right:8px;
-  background:var(--white);
-  border-radius:12px;
-  padding:2px 5px;
-  box-shadow:0 1px 3px #0003;
-  font-size:12px;
-}
+    body.dark {
+      --bg: #111b21;
+      --panel: #202c33;
+      --white: #202c33;
+      --text: #e9edef;
+      --muted: #aebac1;
+      --border: #374045;
+      --light-green: #005c4b;
+    }
 
-/* COMPOSER */
-.composer{
-  position:relative;
-  min-height:65px;
-  padding:9px 12px;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  background:var(--light);
-}
-.message-input{
-  flex:1;
-  min-width:0;
-  border:0;
-  outline:none;
-  border-radius:10px;
-  padding:12px 14px;
-  background:var(--white);
-  color:var(--text);
-}
-.send-btn{
-  background:var(--green);
-  color:white;
-}
-.send-btn:hover{
-  background:var(--green-dark);
-}
-.emoji-panel{
-  display:none;
-  position:absolute;
-  bottom:65px;
-  left:8px;
-  width:285px;
-  padding:10px;
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:12px;
-  box-shadow:0 5px 25px #0003;
-  z-index:20;
-}
-.emoji-panel button{
-  border:0;
-  background:transparent;
-  font-size:23px;
-  padding:5px;
-  cursor:pointer;
-}
-.emoji-panel button:hover{
-  background:var(--light);
-  border-radius:6px;
-}
-.recording{
-  display:none;
-  align-items:center;
-  gap:8px;
-  color:#d93025;
-  font-size:12px;
-}
-.record-dot{
-  width:8px;
-  height:8px;
-  background:#d93025;
-  border-radius:50%;
-  animation:pulse 1s infinite;
-}
-@keyframes pulse{
-  50%{opacity:.25}
-}
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+    }
 
-/* RIGHT */
-.info-row{
-  padding:14px 0;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  justify-content:space-between;
-}
-.info-row span:last-child{
-  color:var(--muted);
-}
-.danger{
-  color:#e53935;
-  cursor:pointer;
-}
+    button,
+    input {
+      font: inherit;
+    }
 
-/* CONTEXT MENU */
-.context{
-  position:fixed;
-  display:none;
-  background:var(--white);
-  border-radius:8px;
-  box-shadow:0 4px 20px #0004;
-  z-index:100;
-  overflow:hidden;
-}
-.context button{
-  display:block;
-  width:160px;
-  border:0;
-  background:var(--white);
-  color:var(--text);
-  padding:11px 15px;
-  text-align:left;
-  cursor:pointer;
-}
-.context button:hover{
-  background:var(--light);
-}
+    button {
+      border: none;
+      cursor: pointer;
+    }
 
-/* REPLY BAR */
-.reply-bar{
-  display:none;
-  background:var(--white);
-  border-left:4px solid var(--green);
-  padding:7px 12px;
-  align-items:center;
-  justify-content:space-between;
-}
-.reply-bar small{
-  color:var(--muted);
-}
-.reply-close{
-  border:0;
-  background:none;
-  cursor:pointer;
-  font-size:18px;
-}
+    /* =========================
+       MAIN APP
+    ========================= */
 
-/* RESPONSIVE */
-@media(max-width:1050px){
-  .app{
-    grid-template-columns:230px minmax(400px,1fr);
-  }
-  .right-sidebar{
-    display:none;
-  }
-}
-@media(max-width:700px){
-  .app{
-    grid-template-columns:1fr;
-  }
-  .left-sidebar{
-    display:none;
-  }
-  .messages{
-    padding:15px 3%;
-  }
-  .bubble{
-    max-width:84%;
-  }
-  .header-buttons{
-    display:none;
-  }
-}
-</style>
+    .app {
+      width: 100%;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 300px minmax(420px, 1fr) 300px;
+      background: var(--bg);
+    }
+
+    /* =========================
+       SIDE PANELS
+    ========================= */
+
+    .side {
+      height: 100vh;
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .right-side {
+      border-right: none;
+      border-left: 1px solid var(--border);
+    }
+
+    .side-header {
+      height: 72px;
+      padding: 12px 16px;
+      background: var(--green-dark);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ddd;
+      flex-shrink: 0;
+    }
+
+    .avatar-text {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .profile-name {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .profile-status {
+      font-size: 12px;
+      opacity: .9;
+      margin-top: 3px;
+    }
+
+    .header-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      color: white;
+      font-size: 19px;
+    }
+
+    .header-btn:hover {
+      background: rgba(255,255,255,.22);
+    }
+
+    /* =========================
+       SIDE PROFILE CARD
+    ========================= */
+
+    .side-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .profile-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 15px;
+    }
+
+    .profile-large {
+      text-align: center;
+      padding: 10px 0 16px;
+    }
+
+    .profile-large img,
+    .profile-large .avatar-text {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 12px;
+      display: flex;
+      object-fit: cover;
+    }
+
+    .profile-large img {
+      border-radius: 50%;
+    }
+
+    .profile-large .avatar-text {
+      border-radius: 50%;
+      font-size: 30px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .profile-large h2 {
+      font-size: 21px;
+      margin-bottom: 5px;
+    }
+
+    .profile-large p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .info-row {
+      padding: 12px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .info-title {
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .info-value {
+      font-size: 14px;
+    }
+
+    .settings-list {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .settings-title {
+      padding: 14px 16px;
+      font-weight: bold;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row {
+      padding: 13px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .switch {
+      position: relative;
+      width: 42px;
+      height: 23px;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: #bbb;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      width: 17px;
+      height: 17px;
+      left: 3px;
+      top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: .2s;
+    }
+
+    .switch input:checked + .slider {
+      background: var(--green);
+    }
+
+    .switch input:checked + .slider:before {
+      transform: translateX(19px);
+    }
+
+    /* =========================
+       SIDE COMPOSER
+    ========================= */
+
+    .side-composer {
+      border-top: 1px solid var(--border);
+      background: var(--panel);
+      padding: 10px;
+    }
+
+    .composer-label {
+      font-size: 11px;
+      color: var(--muted);
+      padding: 0 5px 7px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .composer {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      padding: 5px;
+    }
+
+    .composer input {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      padding: 8px 4px;
+      font-size: 13px;
+    }
+
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--muted);
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .icon-btn:hover {
+      background: rgba(128,128,128,.12);
+    }
+
+    .send-btn {
+      background: var(--green);
+      color: white;
+    }
+
+    .send-btn:hover {
+      background: #1ebe5d;
+    }
+
+    /* =========================
+       CENTER CHAT
+    ========================= */
+
+    .chat {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg);
+    }
+
+    .chat-header {
+      height: 72px;
+      background: var(--green-dark);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      flex-shrink: 0;
+    }
+
+    .chat-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-title img {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .chat-title h1 {
+      font-size: 17px;
+    }
+
+    .chat-title p {
+      font-size: 12px;
+      margin-top: 3px;
+      opacity: .9;
+    }
+
+    .chat-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .search-box {
+      display: none;
+      background: white;
+      border-radius: 18px;
+      padding: 5px 10px;
+    }
+
+    .search-box input {
+      width: 150px;
+      border: none;
+      outline: none;
+      font-size: 12px;
+    }
+
+    /* =========================
+       MESSAGES
+    ========================= */
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 7%;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(rgba(100,100,100,.08) 1px, transparent 1px);
+      background-size: 18px 18px;
+      scroll-behavior: smooth;
+    }
+
+    .date-divider {
+      display: flex;
+      justify-content: center;
+      margin: 12px 0 18px;
+    }
+
+    .date-divider span {
+      background: rgba(150,150,150,.25);
+      color: var(--muted);
+      padding: 5px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+
+    .message-row {
+      display: flex;
+      margin-bottom: 8px;
+    }
+
+    .message-row.me {
+      justify-content: flex-start;
+    }
+
+    .message-row.uzair {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 72%;
+      min-width: 90px;
+      padding: 8px 10px 6px;
+      border-radius: 9px;
+      position: relative;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+      cursor: context-menu;
+      word-wrap: break-word;
+    }
+
+    .me .bubble {
+      background: var(--white);
+      border-top-left-radius: 2px;
+    }
+
+    .uzair .bubble {
+      background: var(--light-green);
+      border-top-right-radius: 2px;
+    }
+
+    .message-text {
+      font-size: 14px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      padding-right: 35px;
+    }
+
+    .message-meta {
+      display: flex;
+      justify-content: flex-end;
+      gap: 4px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 9px;
+      margin-top: 4px;
+    }
+
+    .ticks {
+      color: #53bdeb;
+      font-size: 12px;
+    }
+
+    .message-reaction {
+      position: absolute;
+      bottom: -8px;
+      left: 8px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1px 5px;
+      font-size: 12px;
+    }
+
+    .star {
+      color: #f4b400;
+    }
+
+    .reply-preview {
+      border-left: 3px solid var(--green);
+      background: rgba(128,128,128,.10);
+      border-radius: 4px;
+      padding: 5px 7px;
+      margin-bottom: 6px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .attachment {
+      margin-top: 3px;
+    }
+
+    .attachment img {
+      max-width: 250px;
+      max-height: 220px;
+      border-radius: 7px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .attachment a {
+      color: inherit;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .audio-player {
+      width: 210px;
+      max-width: 100%;
+    }
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    .search-panel {
+      position: absolute;
+      top: 70px;
+      right: 10px;
+      z-index: 20;
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 8px;
+      border-radius: 10px;
+      display: none;
+      box-shadow: var(--shadow);
+    }
+
+    .search-panel input {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      padding: 7px 9px;
+      outline: none;
+      border-radius: 7px;
+    }
+
+    /* =========================
+       EMOJI PANEL
+    ========================= */
+
+    .emoji-panel {
+      position: fixed;
+      z-index: 100;
+      display: none;
+      width: 270px;
+      max-height: 190px;
+      overflow-y: auto;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .emoji {
+      width: 35px;
+      height: 35px;
+      background: transparent;
+      font-size: 20px;
+      border-radius: 6px;
+    }
+
+    .emoji:hover {
+      background: rgba(128,128,128,.12);
+    }
+
+    /* =========================
+       CONTEXT MENU
+    ========================= */
+
+    .context-menu {
+      position: fixed;
+      display: none;
+      z-index: 200;
+      width: 160px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .context-menu button {
+      display: block;
+      width: 100%;
+      padding: 10px 13px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .context-menu button:hover {
+      background: rgba(128,128,128,.12);
+    }
+
+    /* =========================
+       TYPING / REPLY BAR
+    ========================= */
+
+    .reply-bar {
+      display: none;
+      padding: 7px 10px;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .reply-bar strong {
+      color: var(--green-dark);
+    }
+
+    .reply-close {
+      float: right;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal {
+      width: 440px;
+      max-width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--white);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+
+    .modal h2 {
+      margin-bottom: 15px;
+    }
+
+    .modal-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .modal-btn {
+      padding: 9px 13px;
+      border-radius: 8px;
+      background: var(--green);
+      color: white;
+      font-size: 12px;
+    }
+
+    .modal-btn.danger {
+      background: var(--danger);
+    }
+
+    .modal-btn.secondary {
+      background: #777;
+    }
+
+    /* =========================
+       RECORDING
+    ========================= */
+
+    .recording {
+      animation: pulse 1s infinite;
+      color: red !important;
+    }
+
+    @keyframes pulse {
+      50% {
+        transform: scale(1.12);
+      }
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #222;
+      color: white;
+      padding: 9px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1100px) {
+      .app {
+        grid-template-columns: 240px minmax(360px, 1fr) 240px;
+      }
+
+      .messages {
+        padding-left: 4%;
+        padding-right: 4%;
+      }
+    }
+
+    @media (max-width: 850px) {
+      .app {
+        grid-template-columns: 190px minmax(330px, 1fr) 190px;
+      }
+
+      .side-content {
+        padding: 10px;
+      }
+
+      .profile-large h2 {
+        font-size: 17px;
+      }
+
+      .settings-list {
+        font-size: 11px;
+      }
+
+      .bubble {
+        max-width: 85%;
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .side {
+        height: auto;
+        min-height: 390px;
+      }
+
+      .chat {
+        height: 650px;
+        order: -1;
+      }
+
+      .side-content {
+        max-height: 300px;
+      }
+
+      .left-side,
+      .right-side {
+        border: none;
+        border-top: 1px solid var(--border);
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="app">
-
-<!-- ================= LEFT: YOU ================= -->
-<aside class="sidebar left-sidebar">
-
-  <div class="sidebar-header">
-    <div class="avatar">Y</div>
-    <strong>My Chat</strong>
-  </div>
-
-  <div class="profile">
-    <div class="avatar big">Y</div>
-    <h2>You</h2>
-    <div class="muted">Available</div>
-  </div>
-
-  <div class="search">
-    <input id="searchInput" placeholder="Search messages...">
-  </div>
-
-  <div class="section">
-    <div class="section-title">Chats</div>
-
-    <div class="contact">
-      <div class="avatar">U</div>
-      <div>
-        <strong>Uzair</strong>
-        <div class="muted">online</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Options</div>
-
-    <div class="action" onclick="toggleDarkMode()">
-      🌙 &nbsp; Dark mode
-    </div>
-
-    <div class="action" onclick="exportChat()">
-      💾 &nbsp; Export chat
-    </div>
-
-    <div class="action" onclick="clearChat()">
-      🗑️ &nbsp; Clear chat
-    </div>
-  </div>
-
-</aside>
-
-
-<!-- ================= CENTER CHAT ================= -->
-<main class="chat">
-
-  <header class="chat-header">
-
-    <div class="avatar">U</div>
-
-    <div class="chat-title">
-      <strong>Uzair</strong>
-
-      <div class="status">
-        <span id="typingIndicator" class="typing">
-          typing...
-        </span>
-
-        <span id="onlineText" class="online">
-          online
-        </span>
-      </div>
-    </div>
-
-    <div class="header-buttons">
-      <button class="icon-btn" onclick="focusSearch()">🔍</button>
-      <button class="icon-btn" onclick="alert('More options')">⋮</button>
-    </div>
-
-  </header>
-
-
-  <section class="messages" id="messages">
-
-    <div class="day">
-      <span>TODAY</span>
-    </div>
-
-  </section>
-
-
-  <div class="reply-bar" id="replyBar">
-    <div>
-      <strong>Replying</strong><br>
-      <small id="replyText"></small>
-    </div>
-
-    <button class="reply-close" onclick="cancelReply()">✕</button>
-  </div>
-
-
-  <!-- Emoji -->
-  <div class="emoji-panel" id="emojiPanel"></div>
-
-
-  <footer class="composer">
-
-    <button
-      class="icon-btn"
-      id="emojiButton"
-      title="Emoji">
-      😊
-    </button>
-
-    <button
-      class="icon-btn"
-      onclick="document.getElementById('fileInput').click()"
-      title="Attach">
-      📎
-    </button>
-
-    <input
-      id="fileInput"
-      type="file"
-      hidden
-      accept="image/*,video/*,audio/*,.pdf,.txt,.doc,.docx">
-
-    <input
-      id="messageInput"
-      class="message-input"
-      type="text"
-      placeholder="Type a message..."
-      autocomplete="off">
-
-    <div class="recording" id="recordingIndicator">
-      <span class="record-dot"></span>
-      <span id="recordTime">00:00</span>
-    </div>
-
-    <button
-      class="icon-btn"
-      id="micButton"
-      title="Voice recording">
-      🎙️
-    </button>
-
-    <button
-      class="icon-btn send-btn"
-      id="sendButton"
-      title="Send">
-      ➤
-    </button>
-
-  </footer>
-
-</main>
-
-
-<!-- ================= RIGHT: UZAIR ================= -->
-<aside class="sidebar right-sidebar">
-
-  <div class="sidebar-header">
-    <strong>Contact Info</strong>
-  </div>
-
-  <div class="profile">
-    <div class="avatar big">U</div>
-    <h2>Uzair</h2>
-    <div class="muted online">online</div>
-  </div>
-
-  <div class="section">
-
-    <div class="info-row">
-      <span>🔔 Notifications</span>
-      <span>On</span>
-    </div>
-
-    <div class="info-row">
-      <span>🔒 Encryption</span>
-      <span>Local</span>
-    </div>
-
-    <div class="info-row">
-      <span>🖼️ Media</span>
-      <span id="mediaCount">0</span>
-    </div>
-
-    <div class="info-row">
-      <span>⭐ Starred</span>
-      <span id="starCount">0</span>
-    </div>
-
-  </div>
-
-  <div class="section">
-
-    <div class="section-title">
-      About
-    </div>
-
-    <div class="muted">
-      WhatsApp-style frontend chat.
-      Everything runs locally in your browser.
-      No backend required.
-    </div>
-
-  </div>
-
-  <div class="section">
-
-    <div
-      class="danger"
-      onclick="clearChat()">
-      🗑️ Clear chat
-    </div>
-
-  </div>
-
-</aside>
-
-</div>
-
-
-<!-- ================= CONTEXT MENU ================= -->
-<div class="context" id="contextMenu">
-
-  <button onclick="replyMessage()">
-    ↩️ Reply
-  </button>
-
-  <button onclick="editMessage()">
-    ✏️ Edit
-  </button>
-
-  <button onclick="copyMessage()">
-    📋 Copy
-  </button>
-
-  <button onclick="reactMessage()">
-    ❤️ React
-  </button>
-
-  <button onclick="starMessage()">
-    ⭐ Star
-  </button>
-
-  <button onclick="deleteMessage()">
-    🗑️ Delete
-  </button>
-
-</div>
-
-
-<script>
-
-/* =====================================================
-   STORAGE
-===================================================== */
-
-const STORAGE_KEY = "uzair-whatsapp-chat-v1";
-
-let messages =
-  JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-
-let selectedMessage = null;
-let replyTo = null;
-
-function save(){
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(messages)
-  );
-}
-
-
-/* =====================================================
-   HELPERS
-===================================================== */
-
-function $(id){
-  return document.getElementById(id);
-}
-
-function escapeHTML(value){
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-function currentTime(){
-  return new Date().toLocaleTimeString([],{
-    hour:"2-digit",
-    minute:"2-digit"
-  });
-}
-
-
-/* =====================================================
-   RENDER
-===================================================== */
-
-function renderMessages(filter=""){
-
-  const box = $("messages");
-
-  box.innerHTML = `
-    <div class="day">
-      <span>TODAY</span>
-    </div>
-  `;
-
-  messages.forEach((message,index)=>{
-
-    const text =
-      (message.text || "").toLowerCase();
-
-    if(
-      filter &&
-      !text.includes(filter.toLowerCase())
-    ){
-      return;
-    }
-
-    const row =
-      document.createElement("div");
-
-    row.className =
-      "row " + message.from;
-
-    row.dataset.index = index;
-
-
-    let html = "";
-
-
-    /* Reply */
-    if(message.reply){
-
-      html += `
-        <div class="reply-preview">
-          ↩️ ${escapeHTML(message.reply)}
+  <div class="app">
+
+    <!-- =====================================================
+         LEFT SIDE - YOU
+    ====================================================== -->
+
+    <aside class="side left-side">
+
+      <div class="side-header">
+        <div class="profile">
+          <div class="avatar-text">Y</div>
+
+          <div>
+            <div class="profile-name">You</div>
+            <div class="profile-status" id="myStatus">
+              online
+            </div>
+          </div>
         </div>
-      `;
 
-    }
+        <button class="header-btn" onclick="openSettings()">
+          ⚙
+        </button>
+      </div>
 
+      <div class="side-content">
 
-    /* Image */
-    if(
-      message.file &&
-      message.fileType &&
-      message.fileType.startsWith("image/")
-    ){
+        <div class="profile-card">
 
-      html += `
-        <img
-          class="message-image"
-          src="${message.file}"
-          alt="image">
-      `;
+          <div class="profile-large">
+            <div class="avatar-text">Y</div>
 
-    }
+            <h2>You</h2>
+            <p>My profile</p>
+          </div>
 
+          <div class="info-row">
+            <div class="info-title">About</div>
+            <div class="info-value">
+              Available
+            </div>
+          </div>
 
-    /* Audio */
-    else if(
-      message.file &&
-      message.fileType &&
-      message.fileType.startsWith("audio/")
-    ){
+          <div class="info-row">
+            <div class="info-title">Chat</div>
+            <div class="info-value">
+              You ↔ Uzair
+            </div>
+          </div>
 
-      html += `
-        <audio
-          controls
-          src="${message.file}"
-          style="max-width:230px;display:block;margin-bottom:5px">
-        </audio>
-      `;
+          <div class="info-row">
+            <div class="info-title">Messages</div>
+            <div class="info-value" id="myMessageCount">
+              0
+            </div>
+          </div>
 
-    }
-
-
-    /* Other file */
-    else if(message.file){
-
-      html += `
-        <div class="message-file">
-          📎 ${escapeHTML(message.name || "File")}
         </div>
-      `;
 
-    }
+        <div class="settings-list">
+
+          <div class="settings-title">
+            Your options
+          </div>
+
+          <div class="setting-row">
+            <span>Chat sounds</span>
+
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="soundToggle"
+                checked
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <span>Dark mode</span>
+
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="darkToggle"
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <span>Save chat locally</span>
+
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="saveToggle"
+                checked
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- YOU COMPOSER -->
+
+      <div class="side-composer">
+
+        <div class="composer-label">
+          Message as You
+        </div>
+
+        <div id="myReplyBar" class="reply-bar">
+          <span id="myReplyText"></span>
+          <span
+            class="reply-close"
+            onclick="cancelReply()"
+          >×</span>
+        </div>
+
+        <div class="composer">
+
+          <button
+            class="icon-btn"
+            onclick="showEmoji(this, 'myInput')"
+            title="Emoji"
+          >
+            😊
+          </button>
+
+          <button
+            class="icon-btn"
+            onclick="openFile('myFile')"
+            title="Attachment"
+          >
+            📎
+          </button>
+
+          <input
+            id="myInput"
+            type="text"
+            placeholder="Type as You..."
+            autocomplete="off"
+          >
+
+          <button
+            id="myMic"
+            class="icon-btn"
+            onclick="toggleRecording('me')"
+            title="Voice"
+          >
+            🎙
+          </button>
+
+          <button
+            class="icon-btn send-btn"
+            onclick="sendMessage('me')"
+            title="Send"
+          >
+            ➤
+          </button>
+
+        </div>
+
+        <input
+          id="myFile"
+          type="file"
+          hidden
+          accept="image/*,audio/*,.pdf,.txt,.doc,.docx"
+          onchange="handleFile(this,'me')"
+        >
+
+      </div>
+
+    </aside>
 
 
-    html += escapeHTML(message.text || "");
+    <!-- =====================================================
+         CENTER - SHARED CONVERSATION
+    ====================================================== -->
+
+    <main class="chat">
+
+      <header class="chat-header">
+
+        <div class="chat-title">
+
+          <img
+            src="whatsapp.png"
+            alt="WhatsApp"
+          >
+
+          <div>
+            <h1>You & Uzair</h1>
+
+            <p id="centerStatus">
+              Conversation open
+            </p>
+          </div>
+
+        </div>
+
+        <div class="chat-actions">
+
+          <button
+            class="header-btn"
+            onclick="toggleSearch()"
+            title="Search"
+          >
+            🔎
+          </button>
+
+          <button
+            class="header-btn"
+            onclick="openSettings()"
+            title="Settings"
+          >
+            ⚙
+          </button>
+
+        </div>
+
+      </header>
 
 
-    if(message.starred){
-      html += ` ⭐`;
-    }
+      <!-- SEARCH -->
+
+      <div
+        id="searchPanel"
+        class="search-panel"
+      >
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Search messages..."
+          oninput="searchMessages()"
+        >
+      </div>
 
 
-    html += `
-      <span class="meta">
-        ${message.time}
+      <!-- MESSAGES -->
 
-        ${
-          message.from === "me"
-          ? `<span class="ticks">✓✓</span>`
-          : ""
+      <div
+        id="messages"
+        class="messages"
+      ></div>
+
+    </main>
+
+
+    <!-- =====================================================
+         RIGHT SIDE - UZAIR
+    ====================================================== -->
+
+    <aside class="side right-side">
+
+      <div class="side-header">
+
+        <div class="profile">
+
+          <img
+            class="avatar"
+            src="whatsapp.png"
+            alt="Uzair"
+          >
+
+          <div>
+            <div class="profile-name">
+              Uzair
+            </div>
+
+            <div
+              class="profile-status"
+              id="uzairStatus"
+            >
+              online
+            </div>
+          </div>
+
+        </div>
+
+        <button
+          class="header-btn"
+          onclick="openSettings()"
+        >
+          ⚙
+        </button>
+
+      </div>
+
+
+      <div class="side-content">
+
+        <div class="profile-card">
+
+          <div class="profile-large">
+
+            <img
+              src="whatsapp.png"
+              alt="Uzair"
+            >
+
+            <h2>Uzair</h2>
+
+            <p>Contact</p>
+
+          </div>
+
+          <div class="info-row">
+            <div class="info-title">
+              About
+            </div>
+
+            <div class="info-value">
+              Available
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-title">
+              Chat
+            </div>
+
+            <div class="info-value">
+              Open conversation
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-title">
+              Messages
+            </div>
+
+            <div
+              class="info-value"
+              id="uzairMessageCount"
+            >
+              0
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="settings-list">
+
+          <div class="settings-title">
+            Uzair options
+          </div>
+
+          <div class="setting-row">
+            <span>Notifications</span>
+
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="notificationToggle"
+                checked
+              >
+
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <span>Chat sounds</span>
+
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="uzairSoundToggle"
+                checked
+              >
+
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <span>Dark mode</span>
+
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="uzairDarkToggle"
+              >
+
+              <span class="slider"></span>
+            </label>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- UZAIR COMPOSER -->
+
+      <div class="side-composer">
+
+        <div class="composer-label">
+          Message as Uzair
+        </div>
+
+        <div
+          id="uzairReplyBar"
+          class="reply-bar"
+        >
+          <span id="uzairReplyText"></span>
+
+          <span
+            class="reply-close"
+            onclick="cancelReply()"
+          >×</span>
+        </div>
+
+        <div class="composer">
+
+          <button
+            class="icon-btn"
+            onclick="showEmoji(this, 'uzairInput')"
+            title="Emoji"
+          >
+            😊
+          </button>
+
+          <button
+            class="icon-btn"
+            onclick="openFile('uzairFile')"
+            title="Attachment"
+          >
+            📎
+          </button>
+
+          <input
+            id="uzairInput"
+            type="text"
+            placeholder="Type as Uzair..."
+            autocomplete="off"
+          >
+
+          <button
+            id="uzairMic"
+            class="icon-btn"
+            onclick="toggleRecording('uzair')"
+            title="Voice"
+          >
+            🎙
+          </button>
+
+          <button
+            class="icon-btn send-btn"
+            onclick="sendMessage('uzair')"
+            title="Send"
+          >
+            ➤
+          </button>
+
+        </div>
+
+        <input
+          id="uzairFile"
+          type="file"
+          hidden
+          accept="image/*,audio/*,.pdf,.txt,.doc,.docx"
+          onchange="handleFile(this,'uzair')"
+        >
+
+      </div>
+
+    </aside>
+
+  </div>
+
+
+  <!-- =====================================================
+       EMOJI PANEL
+  ====================================================== -->
+
+  <div
+    id="emojiPanel"
+    class="emoji-panel"
+  ></div>
+
+
+  <!-- =====================================================
+       CONTEXT MENU
+  ====================================================== -->
+
+  <div
+    id="contextMenu"
+    class="context-menu"
+  >
+
+    <button onclick="contextReply()">
+      ↩ Reply
+    </button>
+
+    <button onclick="contextEdit()">
+      ✏ Edit
+    </button>
+
+    <button onclick="contextCopy()">
+      📋 Copy
+    </button>
+
+    <button onclick="contextReact()">
+      ❤️ Reaction
+    </button>
+
+    <button onclick="contextStar()">
+      ⭐ Star
+    </button>
+
+    <button onclick="contextDelete()">
+      🗑 Delete
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       SETTINGS MODAL
+  ====================================================== -->
+
+  <div
+    id="settingsModal"
+    class="modal-backdrop"
+  >
+
+    <div class="modal">
+
+      <h2>
+        Settings
+      </h2>
+
+      <div class="modal-row">
+        <span>Notifications</span>
+
+        <label class="switch">
+          <input
+            type="checkbox"
+            id="modalNotifications"
+            checked
+          >
+
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="modal-row">
+        <span>Chat sounds</span>
+
+        <label class="switch">
+          <input
+            type="checkbox"
+            id="modalSounds"
+            checked
+          >
+
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="modal-row">
+        <span>Dark mode</span>
+
+        <label class="switch">
+          <input
+            type="checkbox"
+            id="modalDark"
+          >
+
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="modal-row">
+        <span>Save messages on this browser</span>
+
+        <label class="switch">
+          <input
+            type="checkbox"
+            id="modalSave"
+            checked
+          >
+
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          class="modal-btn"
+          onclick="exportChat()"
+        >
+          Export Chat
+        </button>
+
+        <button
+          class="modal-btn danger"
+          onclick="clearChat()"
+        >
+          Clear Chat
+        </button>
+
+        <button
+          class="modal-btn secondary"
+          onclick="closeSettings()"
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       TOAST
+  ====================================================== -->
+
+  <div
+    id="toast"
+    class="toast"
+  ></div>
+
+
+  <script>
+
+    /* =====================================================
+       STORAGE
+    ====================================================== */
+
+    const STORAGE_KEY = "whatsapp_local_chat_v2";
+    const SETTINGS_KEY = "whatsapp_local_settings_v2";
+
+
+    /* =====================================================
+       DEFAULT MESSAGES
+    ====================================================== */
+
+    let messages = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "null"
+    );
+
+    if (!Array.isArray(messages)) {
+
+      messages = [
+
+        {
+          id: createId(),
+          from: "uzair",
+          text: "Assalam o Alaikum 👋",
+          time: getTime(),
+          date: todayDate(),
+          reaction: null,
+          starred: false,
+          reply: null
+        },
+
+        {
+          id: createId(),
+          from: "me",
+          text: "Wa Alaikum Assalam! 😊",
+          time: getTime(),
+          date: todayDate(),
+          reaction: null,
+          starred: false,
+          reply: null
+        },
+
+        {
+          id: createId(),
+          from: "uzair",
+          text: "Kya haal hai?",
+          time: getTime(),
+          date: todayDate(),
+          reaction: null,
+          starred: false,
+          reply: null
         }
-      </span>
-    `;
 
-
-    if(message.reaction){
-
-      html += `
-        <span class="reaction">
-          ${message.reaction}
-        </span>
-      `;
-
-    }
-
-
-    row.innerHTML = `
-      <div class="bubble">
-        ${html}
-      </div>
-    `;
-
-
-    /* Double click = context menu */
-    row.addEventListener("dblclick",event=>{
-
-      selectedMessage = index;
-
-      showContextMenu(
-        event.clientX,
-        event.clientY
-      );
-
-    });
-
-
-    box.appendChild(row);
-
-  });
-
-
-  box.scrollTop = box.scrollHeight;
-
-
-  $("mediaCount").textContent =
-    messages.filter(m=>m.file).length;
-
-  $("starCount").textContent =
-    messages.filter(m=>m.starred).length;
-}
-
-
-/* =====================================================
-   SEND
-===================================================== */
-
-function sendMessage(){
-
-  const input = $("messageInput");
-
-  const value =
-    input.value.trim();
-
-  if(!value) return;
-
-
-  messages.push({
-
-    id:Date.now(),
-
-    from:"me",
-
-    text:value,
-
-    time:currentTime(),
-
-    reply:replyTo
-      ? replyTo.text
-      : null,
-
-    starred:false
-
-  });
-
-
-  input.value = "";
-
-  cancelReply();
-
-  save();
-
-  renderMessages();
-
-  simulateUzairReply(value);
-}
-
-
-/* Enter to send */
-$("messageInput").addEventListener(
-  "keydown",
-  event=>{
-
-    if(event.key === "Enter"){
-
-      event.preventDefault();
-
-      sendMessage();
-
-    }
-
-  }
-);
-
-$("sendButton").onclick =
-  sendMessage;
-
-
-/* =====================================================
-   SIMULATED UZAIR
-===================================================== */
-
-let replyTimer;
-
-function simulateUzairReply(){
-
-  clearTimeout(replyTimer);
-
-  $("typingIndicator").style.display =
-    "inline";
-
-  $("onlineText").style.display =
-    "none";
-
-
-  const replies = [
-
-    "Haan bilkul 👍",
-
-    "Theek hai 😊",
-
-    "Okay bro!",
-
-    "Samajh gaya.",
-
-    "Nice 🔥",
-
-    "Hahaha 😂",
-
-    "Great! ❤️",
-
-    "Haan, karte hain.",
-
-    "Bilkul sahi.",
-
-    "👍👍"
-
-  ];
-
-
-  replyTimer = setTimeout(()=>{
-
-    const reply =
-      replies[
-        Math.floor(
-          Math.random() * replies.length
-        )
       ];
 
-
-    messages.push({
-
-      id:Date.now(),
-
-      from:"uzair",
-
-      text:reply,
-
-      time:currentTime(),
-
-      starred:false
-
-    });
-
-
-    $("typingIndicator").style.display =
-      "none";
-
-    $("onlineText").style.display =
-      "inline";
-
-
-    save();
-
-    renderMessages();
-
-  },1000 + Math.random()*1800);
-
-}
-
-
-/* =====================================================
-   EMOJIS
-===================================================== */
-
-const emojis =
-"😀 😃 😄 😁 😂 🤣 😊 😍 😘 😎 🤔 😢 😭 😡 😱 😴 🙏 👍 👎 👌 👋 🤝 ❤️ 🧡 💛 💚 💙 💜 🖤 🤍 💯 🔥 🎉 🎊 🚀 ⭐ ✨ 💪 👏 🙌 😇 🤩 😅 🤗 🥰".split(" ");
-
-emojis.forEach(emoji=>{
-
-  const button =
-    document.createElement("button");
-
-  button.textContent = emoji;
-
-  button.onclick = ()=>{
-
-    $("messageInput").value += emoji;
-
-    $("messageInput").focus();
-
-  };
-
-  $("emojiPanel").appendChild(button);
-
-});
-
-
-$("emojiButton").onclick = ()=>{
-
-  const panel = $("emojiPanel");
-
-  panel.style.display =
-    panel.style.display === "block"
-      ? "none"
-      : "block";
-
-};
-
-
-/* =====================================================
-   FILE ATTACHMENT
-===================================================== */
-
-$("fileInput").onchange = ()=>{
-
-  const file =
-    $("fileInput").files[0];
-
-  if(!file) return;
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload = ()=>{
-
-    messages.push({
-
-      id:Date.now(),
-
-      from:"me",
-
-      text:
-        file.type.startsWith("image/")
-        ? ""
-        : "📎 " + file.name,
-
-      file:reader.result,
-
-      fileType:file.type,
-
-      name:file.name,
-
-      time:currentTime(),
-
-      starred:false
-
-    });
-
-
-    save();
-
-    renderMessages();
-
-  };
-
-
-  reader.readAsDataURL(file);
-
-  $("fileInput").value = "";
-
-};
-
-
-/* =====================================================
-   VOICE RECORDING
-===================================================== */
-
-let recorder = null;
-let audioChunks = [];
-let recordTimer = null;
-let recordSeconds = 0;
-let microphoneStream = null;
-
-
-$("micButton").onclick =
-  async function(){
-
-    /* Stop */
-    if(
-      recorder &&
-      recorder.state === "recording"
-    ){
-
-      recorder.stop();
-
-      return;
-
+      saveMessages();
     }
 
 
-    if(!navigator.mediaDevices){
+    /* =====================================================
+       SETTINGS
+    ====================================================== */
 
-      alert(
-        "Microphone recording is not supported."
+    let settings = JSON.parse(
+      localStorage.getItem(SETTINGS_KEY) || "null"
+    );
+
+    if (!settings) {
+
+      settings = {
+        sound: true,
+        dark: false,
+        save: true,
+        notifications: true
+      };
+
+      saveSettings();
+    }
+
+
+    /* =====================================================
+       STATE
+    ====================================================== */
+
+    let activeInput = null;
+
+    let selectedMessageId = null;
+
+    let replyTarget = null;
+
+    let mediaRecorder = null;
+
+    let audioChunks = [];
+
+    let recordingSide = null;
+
+    let typingTimers = {
+      me: null,
+      uzair: null
+    };
+
+
+    /* =====================================================
+       HELPERS
+    ====================================================== */
+
+    function createId() {
+      return Date.now() + "_" +
+        Math.random().toString(36).slice(2);
+    }
+
+
+    function getTime() {
+
+      return new Date().toLocaleTimeString(
+        [],
+        {
+          hour: "2-digit",
+          minute: "2-digit"
+        }
       );
 
-      return;
+    }
+
+
+    function todayDate() {
+
+      return new Date().toLocaleDateString(
+        [],
+        {
+          year: "numeric",
+          month: "short",
+          day: "numeric"
+        }
+      );
 
     }
 
 
-    try{
+    function saveMessages() {
 
-      microphoneStream =
-        await navigator.mediaDevices
-          .getUserMedia({audio:true});
+      if (settings.save) {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(messages)
+        );
+      }
+
+    }
 
 
-      recorder =
-        new MediaRecorder(
-          microphoneStream
+    function saveSettings() {
+
+      localStorage.setItem(
+        SETTINGS_KEY,
+        JSON.stringify(settings)
+      );
+
+    }
+
+
+    function escapeHTML(text) {
+
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    function showToast(text) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = text;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1800);
+
+    }
+
+
+    /* =====================================================
+       RENDER MESSAGES
+    ====================================================== */
+
+    function renderMessages(list = messages) {
+
+      const container =
+        document.getElementById("messages");
+
+      container.innerHTML = "";
+
+      let lastDate = "";
+
+      list.forEach(message => {
+
+        if (message.date !== lastDate) {
+
+          const divider =
+            document.createElement("div");
+
+          divider.className = "date-divider";
+
+          divider.innerHTML =
+            `<span>${escapeHTML(message.date)}</span>`;
+
+          container.appendChild(divider);
+
+          lastDate = message.date;
+        }
+
+
+        const row =
+          document.createElement("div");
+
+        row.className =
+          "message-row " +
+          (message.from === "me"
+            ? "me"
+            : "uzair");
+
+
+        const bubble =
+          document.createElement("div");
+
+        bubble.className = "bubble";
+
+        bubble.dataset.id =
+          message.id;
+
+
+        let html = "";
+
+
+        /* Reply */
+
+        if (message.reply) {
+
+          html += `
+            <div class="reply-preview">
+              <strong>
+                ${message.reply.from === "me"
+                  ? "You"
+                  : "Uzair"}
+              </strong><br>
+              ${escapeHTML(message.reply.text)}
+            </div>
+          `;
+
+        }
+
+
+        /* Text */
+
+        if (message.text) {
+
+          html += `
+            <div class="message-text">
+              ${escapeHTML(message.text)}
+            </div>
+          `;
+
+        }
+
+
+        /* Attachment */
+
+        if (message.attachment) {
+
+          if (
+            message.attachment.type.startsWith("image/")
+          ) {
+
+            html += `
+              <div class="attachment">
+                <img
+                  src="${message.attachment.data}"
+                  alt="Image"
+                >
+                <a
+                  href="${message.attachment.data}"
+                  download="${escapeHTML(message.attachment.name)}"
+                >
+                  📎 ${escapeHTML(message.attachment.name)}
+                </a>
+              </div>
+            `;
+
+          } else if (
+            message.attachment.type.startsWith("audio/")
+          ) {
+
+            html += `
+              <div class="attachment">
+                <audio
+                  class="audio-player"
+                  controls
+                  src="${message.attachment.data}"
+                ></audio>
+              </div>
+            `;
+
+          } else {
+
+            html += `
+              <div class="attachment">
+                📎
+                <a
+                  href="${message.attachment.data}"
+                  download="${escapeHTML(message.attachment.name)}"
+                >
+                  ${escapeHTML(message.attachment.name)}
+                </a>
+              </div>
+            `;
+
+          }
+
+        }
+
+
+        /* Meta */
+
+        html += `
+          <div class="message-meta">
+
+            ${
+              message.starred
+                ? '<span class="star">⭐</span>'
+                : ''
+            }
+
+            <span>
+              ${escapeHTML(message.time)}
+            </span>
+
+            <span class="ticks">
+              ✓✓
+            </span>
+
+          </div>
+        `;
+
+
+        /* Reaction */
+
+        if (message.reaction) {
+
+          html += `
+            <div class="message-reaction">
+              ${message.reaction}
+            </div>
+          `;
+
+        }
+
+
+        bubble.innerHTML = html;
+
+        bubble.addEventListener(
+          "contextmenu",
+          function(e) {
+
+            e.preventDefault();
+
+            selectedMessageId =
+              message.id;
+
+            showContextMenu(
+              e.clientX,
+              e.clientY
+            );
+
+          }
         );
 
 
-      audioChunks = [];
+        bubble.addEventListener(
+          "dblclick",
+          function(e) {
+
+            selectedMessageId =
+              message.id;
+
+            showContextMenu(
+              e.clientX,
+              e.clientY
+            );
+
+          }
+        );
 
 
-      recorder.ondataavailable =
-        event=>{
+        row.appendChild(bubble);
 
-          audioChunks.push(
-            event.data
-          );
+        container.appendChild(row);
 
-        };
+      });
 
 
-      recorder.onstop = ()=>{
-
-        const blob =
-          new Blob(
-            audioChunks,
-            {type:"audio/webm"}
-          );
+      container.scrollTop =
+        container.scrollHeight;
 
 
-        const reader =
-          new FileReader();
+      updateCounts();
+
+    }
 
 
-        reader.onload = ()=>{
+    /* =====================================================
+       COUNTS
+    ====================================================== */
 
-          messages.push({
+    function updateCounts() {
 
-            id:Date.now(),
+      const myCount =
+        messages.filter(
+          m => m.from === "me"
+        ).length;
 
-            from:"me",
-
-            text:"🎙️ Voice message",
-
-            file:reader.result,
-
-            fileType:"audio/webm",
-
-            name:"voice-message.webm",
-
-            time:currentTime(),
-
-            starred:false
-
-          });
+      const uzairCount =
+        messages.filter(
+          m => m.from === "uzair"
+        ).length;
 
 
-          save();
-
-          renderMessages();
-
-        };
+      document.getElementById(
+        "myMessageCount"
+      ).textContent = myCount;
 
 
-        reader.readAsDataURL(blob);
+      document.getElementById(
+        "uzairMessageCount"
+      ).textContent = uzairCount;
+
+    }
 
 
-        if(microphoneStream){
+    /* =====================================================
+       SEND MESSAGE
+    ====================================================== */
 
-          microphoneStream
-            .getTracks()
-            .forEach(track=>track.stop());
+    function sendMessage(from) {
 
-        }
+      const input =
+        document.getElementById(
+          from === "me"
+            ? "myInput"
+            : "uzairInput"
+        );
+
+      const text =
+        input.value.trim();
 
 
-        stopRecordingUI();
+      if (!text) {
+        return;
+      }
+
+
+      const message = {
+
+        id: createId(),
+
+        from: from,
+
+        text: text,
+
+        time: getTime(),
+
+        date: todayDate(),
+
+        reaction: null,
+
+        starred: false,
+
+        reply: replyTarget
+          ? {
+              from: replyTarget.from,
+              text: replyTarget.text
+            }
+          : null
 
       };
 
 
-      recorder.start();
+      messages.push(message);
 
-      startRecordingUI();
+      saveMessages();
+
+      input.value = "";
+
+      cancelReply();
+
+      renderMessages();
+
+      playSound();
+
+      setTyping(from, false);
 
     }
 
-    catch(error){
 
-      alert(
-        "Please allow microphone permission."
+    /* =====================================================
+       ENTER TO SEND
+    ====================================================== */
+
+    document
+      .getElementById("myInput")
+      .addEventListener(
+        "keydown",
+        e => {
+
+          if (
+            e.key === "Enter" &&
+            !e.shiftKey
+          ) {
+
+            e.preventDefault();
+
+            sendMessage("me");
+
+          }
+
+        }
       );
 
-    }
 
-  };
+    document
+      .getElementById("uzairInput")
+      .addEventListener(
+        "keydown",
+        e => {
 
+          if (
+            e.key === "Enter" &&
+            !e.shiftKey
+          ) {
 
-function startRecordingUI(){
+            e.preventDefault();
 
-  $("recordingIndicator").style.display =
-    "flex";
+            sendMessage("uzair");
 
-  $("micButton").textContent = "⏹️";
+          }
 
-  recordSeconds = 0;
-
-  updateRecordTime();
-
-
-  recordTimer =
-    setInterval(()=>{
-
-      recordSeconds++;
-
-      updateRecordTime();
-
-    },1000);
-
-}
+        }
+      );
 
 
-function updateRecordTime(){
+    /* =====================================================
+       TYPING STATUS
+    ====================================================== */
 
-  const minutes =
-    String(
-      Math.floor(recordSeconds/60)
-    ).padStart(2,"0");
+    function setupTyping(inputId, side) {
 
-  const seconds =
-    String(
-      recordSeconds%60
-    ).padStart(2,"0");
+      document
+        .getElementById(inputId)
+        .addEventListener(
+          "input",
+          function() {
 
-  $("recordTime").textContent =
-    minutes + ":" + seconds;
+            setTyping(side, true);
 
-}
+            clearTimeout(
+              typingTimers[side]
+            );
 
+            typingTimers[side] =
+              setTimeout(
+                () => setTyping(side, false),
+                900
+              );
 
-function stopRecordingUI(){
-
-  clearInterval(recordTimer);
-
-  $("recordingIndicator").style.display =
-    "none";
-
-  $("micButton").textContent =
-    "🎙️";
-
-}
-
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-$("searchInput").oninput =
-  event=>{
-
-    renderMessages(
-      event.target.value
-    );
-
-  };
-
-
-function focusSearch(){
-
-  $("searchInput").focus();
-
-}
-
-
-/* =====================================================
-   CONTEXT MENU
-===================================================== */
-
-const context =
-  $("contextMenu");
-
-
-function showContextMenu(x,y){
-
-  context.style.display = "block";
-
-  context.style.left =
-    Math.min(
-      x,
-      window.innerWidth - 170
-    ) + "px";
-
-  context.style.top =
-    Math.min(
-      y,
-      window.innerHeight - 270
-    ) + "px";
-
-}
-
-
-document.addEventListener(
-  "click",
-  event=>{
-
-    if(
-      !event.target.closest(".context")
-    ){
-
-      context.style.display =
-        "none";
+          }
+        );
 
     }
 
-  }
-);
 
+    function setTyping(side, typing) {
 
-/* =====================================================
-   REPLY
-===================================================== */
+      const element =
+        document.getElementById(
+          side === "me"
+            ? "myStatus"
+            : "uzairStatus"
+        );
 
-function replyMessage(){
 
-  if(selectedMessage === null)
-    return;
+      element.textContent =
+        typing
+          ? "typing..."
+          : "online";
 
 
-  replyTo =
-    messages[selectedMessage];
+      if (side === "uzair") {
 
+        document.getElementById(
+          "centerStatus"
+        ).textContent =
+          typing
+            ? "Uzair is typing..."
+            : "Conversation open";
 
-  $("replyText").textContent =
-    replyTo.text ||
-    replyTo.name ||
-    "Attachment";
+      }
 
+    }
 
-  $("replyBar").style.display =
-    "flex";
 
+    setupTyping("myInput", "me");
 
-  $("messageInput").focus();
+    setupTyping("uzairInput", "uzair");
 
-  context.style.display =
-    "none";
 
-}
+    /* =====================================================
+       EMOJI
+    ====================================================== */
 
+    const emojis = [
+      "😀","😃","😄","😁","😆","😅",
+      "😂","🤣","😊","😇","🙂","🙃",
+      "😉","😌","😍","🥰","😘","😗",
+      "😎","🤩","🤔","😐","😑","😶",
+      "🙄","😏","😣","😥","😮","🤐",
+      "😯","😪","😫","🥱","😴","😌",
+      "🤗","🤭","🤫","🤥","😶‍🌫️",
+      "😱","😨","😰","😢","😭","😤",
+      "😡","🤬","❤️","🧡","💛","💚",
+      "💙","💜","🖤","🤍","💯","🔥",
+      "👍","👎","👏","🙏","🤝","👌",
+      "✌️","🤞","💪","🎉","🎊","✨",
+      "⭐","💔","😂","🤣","😅","🥳"
+    ];
 
-function cancelReply(){
 
-  replyTo = null;
+    const emojiPanel =
+      document.getElementById(
+        "emojiPanel"
+      );
 
-  $("replyBar").style.display =
-    "none";
 
-}
+    emojis.forEach(emoji => {
 
+      const button =
+        document.createElement("button");
 
-/* =====================================================
-   EDIT
-===================================================== */
+      button.className = "emoji";
 
-function editMessage(){
+      button.textContent = emoji;
 
-  if(selectedMessage === null)
-    return;
+      button.onclick = () => {
 
+        if (!activeInput) return;
 
-  const message =
-    messages[selectedMessage];
+        activeInput.value += emoji;
 
+        activeInput.focus();
 
-  if(message.from !== "me"){
+      };
 
-    alert(
-      "Only your own messages can be edited."
-    );
+      emojiPanel.appendChild(button);
 
-    return;
+    });
 
-  }
 
+    function showEmoji(button, inputId) {
 
-  const newText =
-    prompt(
-      "Edit message:",
-      message.text
-    );
+      activeInput =
+        document.getElementById(inputId);
 
 
-  if(newText === null)
-    return;
+      const rect =
+        button.getBoundingClientRect();
 
 
-  message.text =
-    newText.trim();
+      emojiPanel.style.display = "block";
 
 
-  save();
+      const width =
+        emojiPanel.offsetWidth;
 
-  renderMessages();
 
-  context.style.display =
-    "none";
+      let left =
+        rect.left;
 
-}
 
+      if (
+        left + width >
+        window.innerWidth - 10
+      ) {
 
-/* =====================================================
-   COPY
-===================================================== */
+        left =
+          window.innerWidth -
+          width -
+          10;
 
-async function copyMessage(){
+      }
 
-  if(selectedMessage === null)
-    return;
 
+      emojiPanel.style.left =
+        left + "px";
 
-  const text =
-    messages[selectedMessage].text || "";
 
+      emojiPanel.style.bottom =
+        (window.innerHeight -
+          rect.top +
+          8) + "px";
 
-  try{
+    }
 
-    await navigator.clipboard.writeText(text);
 
-    alert("Message copied.");
+    document.addEventListener(
+      "click",
+      e => {
 
-  }
+        if (
+          !e.target.closest(".emoji-panel") &&
+          !e.target.closest(".icon-btn")
+        ) {
 
-  catch{
+          emojiPanel.style.display =
+            "none";
 
-    alert("Copy is not available.");
+        }
 
-  }
-
-
-  context.style.display =
-    "none";
-
-}
-
-
-/* =====================================================
-   REACTION
-===================================================== */
-
-function reactMessage(){
-
-  if(selectedMessage === null)
-    return;
-
-
-  const reactions =
-    ["❤️","👍","😂","😮","😢","🔥"];
-
-  const reaction =
-    prompt(
-      "Choose reaction:\n❤️ 👍 😂 😮 😢 🔥",
-      "❤️"
-    );
-
-
-  if(
-    reaction &&
-    reactions.includes(reaction)
-  ){
-
-    messages[selectedMessage].reaction =
-      reaction;
-
-    save();
-
-    renderMessages();
-
-  }
-
-
-  context.style.display =
-    "none";
-
-}
-
-
-/* =====================================================
-   STAR
-===================================================== */
-
-function starMessage(){
-
-  if(selectedMessage === null)
-    return;
-
-
-  messages[selectedMessage].starred =
-    !messages[selectedMessage].starred;
-
-
-  save();
-
-  renderMessages();
-
-  context.style.display =
-    "none";
-
-}
-
-
-/* =====================================================
-   DELETE
-===================================================== */
-
-function deleteMessage(){
-
-  if(selectedMessage === null)
-    return;
-
-
-  if(
-    !confirm(
-      "Delete this message?"
-    )
-  ) return;
-
-
-  messages.splice(
-    selectedMessage,
-    1
-  );
-
-
-  selectedMessage = null;
-
-  save();
-
-  renderMessages();
-
-  context.style.display =
-    "none";
-
-}
-
-
-/* =====================================================
-   CLEAR
-===================================================== */
-
-function clearChat(){
-
-  if(
-    !confirm(
-      "Clear all messages from this browser?"
-    )
-  ) return;
-
-
-  messages = [];
-
-  save();
-
-  renderMessages();
-
-}
-
-
-/* =====================================================
-   EXPORT
-===================================================== */
-
-function exportChat(){
-
-  const blob =
-    new Blob(
-      [
-        JSON.stringify(
-          messages,
-          null,
-          2
-        )
-      ],
-      {
-        type:"application/json"
       }
     );
 
 
-  const url =
-    URL.createObjectURL(blob);
+    /* =====================================================
+       ATTACHMENTS
+    ====================================================== */
 
+    function openFile(id) {
 
-  const a =
-    document.createElement("a");
+      document
+        .getElementById(id)
+        .click();
 
-  a.href = url;
-
-  a.download =
-    "uzair-chat-export.json";
-
-  a.click();
-
-  URL.revokeObjectURL(url);
-
-}
-
-
-/* =====================================================
-   DARK MODE
-===================================================== */
-
-function toggleDarkMode(){
-
-  document.body.classList.toggle(
-    "dark"
-  );
-
-  localStorage.setItem(
-    "chat-dark-mode",
-    document.body.classList.contains("dark")
-  );
-
-}
-
-
-if(
-  localStorage.getItem(
-    "chat-dark-mode"
-  ) === "true"
-){
-
-  document.body.classList.add("dark");
-
-}
-
-
-/* =====================================================
-   START DEMO
-===================================================== */
-
-if(messages.length === 0){
-
-  messages = [
-
-    {
-      id:1,
-      from:"uzair",
-      text:"Assalam o Alaikum 👋",
-      time:"5:01 PM",
-      starred:false
-    },
-
-    {
-      id:2,
-      from:"me",
-      text:"Wa Alaikum Assalam! 😊",
-      time:"5:02 PM",
-      starred:false
-    },
-
-    {
-      id:3,
-      from:"uzair",
-      text:"Kya haal hai? 🔥",
-      time:"5:03 PM",
-      starred:false
     }
 
-  ];
 
-  save();
+    function handleFile(input, from) {
 
-}
+      const file =
+        input.files[0];
 
-renderMessages();
 
-</script>
+      if (!file) return;
+
+
+      if (file.size > 3 * 1024 * 1024) {
+
+        showToast(
+          "File is too large. Max 3 MB."
+        );
+
+        input.value = "";
+
+        return;
+
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload = function(e) {
+
+        messages.push({
+
+          id: createId(),
+
+          from: from,
+
+          text: "",
+
+          time: getTime(),
+
+          date: todayDate(),
+
+          reaction: null,
+
+          starred: false,
+
+          reply: null,
+
+          attachment: {
+
+            name: file.name,
+
+            type: file.type ||
+              "application/octet-stream",
+
+            data: e.target.result
+
+          }
+
+        });
+
+
+        saveMessages();
+
+        renderMessages();
+
+        playSound();
+
+        input.value = "";
+
+      };
+
+
+      reader.readAsDataURL(file);
+
+    }
+
+
+    /* =====================================================
+       VOICE RECORDING
+    ====================================================== */
+
+    async function toggleRecording(side) {
+
+      const mic =
+        document.getElementById(
+          side === "me"
+            ? "myMic"
+            : "uzairMic"
+        );
+
+
+      if (
+        mediaRecorder &&
+        mediaRecorder.state === "recording"
+      ) {
+
+        mediaRecorder.stop();
+
+        mic.classList.remove(
+          "recording"
+        );
+
+        return;
+
+      }
+
+
+      if (!navigator.mediaDevices) {
+
+        showToast(
+          "Microphone is not available here."
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const stream =
+          await navigator.mediaDevices
+            .getUserMedia({
+              audio: true
+            });
+
+
+        mediaRecorder =
+          new MediaRecorder(stream);
+
+        audioChunks = [];
+
+        recordingSide = side;
+
+
+        mediaRecorder.ondataavailable =
+          event => {
+
+            if (event.data.size > 0) {
+              audioChunks.push(
+                event.data
+              );
+            }
+
+          };
+
+
+        mediaRecorder.onstop = () => {
+
+          const blob =
+            new Blob(
+              audioChunks,
+              { type: "audio/webm" }
+            );
+
+
+          const reader =
+            new FileReader();
+
+
+          reader.onloadend = () => {
+
+            messages.push({
+
+              id: createId(),
+
+              from: recordingSide,
+
+              text: "",
+
+              time: getTime(),
+
+              date: todayDate(),
+
+              reaction: null,
+
+              starred: false,
+
+              reply: null,
+
+              attachment: {
+
+                name:
+                  "voice-message.webm",
+
+                type:
+                  "audio/webm",
+
+                data:
+                  reader.result
+
+              }
+
+            });
+
+
+            saveMessages();
+
+            renderMessages();
+
+            playSound();
+
+          };
+
+
+          reader.readAsDataURL(blob);
+
+
+          stream
+            .getTracks()
+            .forEach(
+              track => track.stop()
+            );
+
+        };
+
+
+        mediaRecorder.start();
+
+        mic.classList.add(
+          "recording"
+        );
+
+        showToast(
+          "Recording... click mic again to stop."
+        );
+
+      } catch (error) {
+
+        showToast(
+          "Microphone permission was denied."
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       CONTEXT MENU
+    ====================================================== */
+
+    const contextMenu =
+      document.getElementById(
+        "contextMenu"
+      );
+
+
+    function showContextMenu(x, y) {
+
+      contextMenu.style.display =
+        "block";
+
+      contextMenu.style.left =
+        Math.min(
+          x,
+          window.innerWidth - 170
+        ) + "px";
+
+      contextMenu.style.top =
+        Math.min(
+          y,
+          window.innerHeight - 250
+        ) + "px";
+
+    }
+
+
+    function hideContextMenu() {
+
+      contextMenu.style.display =
+        "none";
+
+    }
+
+
+    document.addEventListener(
+      "click",
+      e => {
+
+        if (
+          !e.target.closest(".context-menu")
+        ) {
+
+          hideContextMenu();
+
+        }
+
+      }
+    );
+
+
+    function getSelectedMessage() {
+
+      return messages.find(
+        m => m.id === selectedMessageId
+      );
+
+    }
+
+
+    /* =====================================================
+       REPLY
+    ====================================================== */
+
+    function contextReply() {
+
+      const message =
+        getSelectedMessage();
+
+      if (!message) return;
+
+
+      replyTarget = message;
+
+
+      document.getElementById(
+        "myReplyText"
+      ).innerHTML =
+        `Replying to ${
+          message.from === "me"
+            ? "You"
+            : "Uzair"
+        }: ${escapeHTML(message.text || "Attachment")}`;
+
+
+      document.getElementById(
+        "uzairReplyText"
+      ).innerHTML =
+        `Replying to ${
+          message.from === "me"
+            ? "You"
+            : "Uzair"
+        }: ${escapeHTML(message.text || "Attachment")}`;
+
+
+      document.getElementById(
+        "myReplyBar"
+      ).style.display = "block";
+
+
+      document.getElementById(
+        "uzairReplyBar"
+      ).style.display = "block";
+
+
+      document
+        .getElementById(
+          message.from === "me"
+            ? "myInput"
+            : "uzairInput"
+        )
+        .focus();
+
+
+      hideContextMenu();
+
+    }
+
+
+    function cancelReply() {
+
+      replyTarget = null;
+
+      document.getElementById(
+        "myReplyBar"
+      ).style.display = "none";
+
+      document.getElementById(
+        "uzairReplyBar"
+      ).style.display = "none";
+
+    }
+
+
+    /* =====================================================
+       EDIT
+    ====================================================== */
+
+    function contextEdit() {
+
+      const message =
+        getSelectedMessage();
+
+      if (!message) return;
+
+
+      if (!message.text) {
+
+        showToast(
+          "This message cannot be edited."
+        );
+
+        hideContextMenu();
+
+        return;
+
+      }
+
+
+      const newText =
+        prompt(
+          "Edit message:",
+          message.text
+        );
+
+
+      if (
+        newText !== null &&
+        newText.trim()
+      ) {
+
+        message.text =
+          newText.trim();
+
+        saveMessages();
+
+        renderMessages();
+
+      }
+
+
+      hideContextMenu();
+
+    }
+
+
+    /* =====================================================
+       COPY
+    ====================================================== */
+
+    async function contextCopy() {
+
+      const message =
+        getSelectedMessage();
+
+      if (!message) return;
+
+
+      const text =
+        message.text ||
+        message.attachment?.name ||
+        "";
+
+
+      try {
+
+        await navigator.clipboard.writeText(
+          text
+        );
+
+        showToast(
+          "Message copied."
+        );
+
+      } catch {
+
+        showToast(
+          "Copy is not available."
+        );
+
+      }
+
+
+      hideContextMenu();
+
+    }
+
+
+    /* =====================================================
+       REACTION
+    ====================================================== */
+
+    function contextReact() {
+
+      const message =
+        getSelectedMessage();
+
+      if (!message) return;
+
+
+      message.reaction =
+        message.reaction
+          ? null
+          : "❤️";
+
+
+      saveMessages();
+
+      renderMessages();
+
+      hideContextMenu();
+
+    }
+
+
+    /* =====================================================
+       STAR
+    ====================================================== */
+
+    function contextStar() {
+
+      const message =
+        getSelectedMessage();
+
+      if (!message) return;
+
+
+      message.starred =
+        !message.starred;
+
+
+      saveMessages();
+
+      renderMessages();
+
+      hideContextMenu();
+
+    }
+
+
+    /* =====================================================
+       DELETE
+    ====================================================== */
+
+    function contextDelete() {
+
+      const message =
+        getSelectedMessage();
+
+      if (!message) return;
+
+
+      if (
+        confirm(
+          "Delete this message?"
+        )
+      ) {
+
+        messages =
+          messages.filter(
+            m => m.id !== selectedMessageId
+          );
+
+
+        saveMessages();
+
+        renderMessages();
+
+      }
+
+
+      hideContextMenu();
+
+    }
+
+
+    /* =====================================================
+       SEARCH
+    ====================================================== */
+
+    function toggleSearch() {
+
+      const panel =
+        document.getElementById(
+          "searchPanel"
+        );
+
+
+      const visible =
+        panel.style.display === "block";
+
+
+      panel.style.display =
+        visible
+          ? "none"
+          : "block";
+
+
+      if (!visible) {
+
+        document
+          .getElementById(
+            "searchInput"
+          )
+          .focus();
+
+      } else {
+
+        renderMessages();
+
+      }
+
+    }
+
+
+    function searchMessages() {
+
+      const value =
+        document
+          .getElementById(
+            "searchInput"
+          )
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      if (!value) {
+
+        renderMessages();
+
+        return;
+
+      }
+
+
+      const filtered =
+        messages.filter(
+          message =>
+            (
+              message.text || ""
+            )
+            .toLowerCase()
+            .includes(value)
+        );
+
+
+      renderMessages(filtered);
+
+    }
+
+
+    /* =====================================================
+       SETTINGS
+    ====================================================== */
+
+    function openSettings() {
+
+      document.getElementById(
+        "settingsModal"
+      ).style.display = "flex";
+
+
+      syncSettingsUI();
+
+    }
+
+
+    function closeSettings() {
+
+      document.getElementById(
+        "settingsModal"
+      ).style.display = "none";
+
+    }
+
+
+    function syncSettingsUI() {
+
+      document.getElementById(
+        "soundToggle"
+      ).checked =
+        settings.sound;
+
+
+      document.getElementById(
+        "uzairSoundToggle"
+      ).checked =
+        settings.sound;
+
+
+      document.getElementById(
+        "darkToggle"
+      ).checked =
+        settings.dark;
+
+
+      document.getElementById(
+        "uzairDarkToggle"
+      ).checked =
+        settings.dark;
+
+
+      document.getElementById(
+        "saveToggle"
+      ).checked =
+        settings.save;
+
+
+      document.getElementById(
+        "notificationToggle"
+      ).checked =
+        settings.notifications;
+
+
+      document.getElementById(
+        "modalSounds"
+      ).checked =
+        settings.sound;
+
+
+      document.getElementById(
+        "modalDark"
+      ).checked =
+        settings.dark;
+
+
+      document.getElementById(
+        "modalSave"
+      ).checked =
+        settings.save;
+
+
+      document.getElementById(
+        "modalNotifications"
+      ).checked =
+        settings.notifications;
+
+    }
+
+
+    function applySettings() {
+
+      document.body.classList.toggle(
+        "dark",
+        settings.dark
+      );
+
+
+      syncSettingsUI();
+
+    }
+
+
+    document
+      .getElementById("soundToggle")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.sound =
+            e.target.checked;
+
+          saveSettings();
+
+          syncSettingsUI();
+
+        }
+      );
+
+
+    document
+      .getElementById("uzairSoundToggle")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.sound =
+            e.target.checked;
+
+          saveSettings();
+
+          syncSettingsUI();
+
+        }
+      );
+
+
+    document
+      .getElementById("darkToggle")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.dark =
+            e.target.checked;
+
+          saveSettings();
+
+          applySettings();
+
+        }
+      );
+
+
+    document
+      .getElementById("uzairDarkToggle")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.dark =
+            e.target.checked;
+
+          saveSettings();
+
+          applySettings();
+
+        }
+      );
+
+
+    document
+      .getElementById("saveToggle")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.save =
+            e.target.checked;
+
+          saveSettings();
+
+          if (settings.save) {
+            saveMessages();
+          }
+
+        }
+      );
+
+
+    document
+      .getElementById("notificationToggle")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.notifications =
+            e.target.checked;
+
+          saveSettings();
+
+        }
+      );
+
+
+    document
+      .getElementById("modalSounds")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.sound =
+            e.target.checked;
+
+          saveSettings();
+
+          syncSettingsUI();
+
+        }
+      );
+
+
+    document
+      .getElementById("modalDark")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.dark =
+            e.target.checked;
+
+          saveSettings();
+
+          applySettings();
+
+        }
+      );
+
+
+    document
+      .getElementById("modalSave")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.save =
+            e.target.checked;
+
+          saveSettings();
+
+          if (settings.save) {
+            saveMessages();
+          }
+
+        }
+      );
+
+
+    document
+      .getElementById("modalNotifications")
+      .addEventListener(
+        "change",
+        e => {
+
+          settings.notifications =
+            e.target.checked;
+
+          saveSettings();
+
+        }
+      );
+
+
+    /* =====================================================
+       EXPORT CHAT
+    ====================================================== */
+
+    function exportChat() {
+
+      const data =
+        JSON.stringify(
+          messages,
+          null,
+          2
+        );
+
+
+      const blob =
+        new Blob(
+          [data],
+          {
+            type: "application/json"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(blob);
+
+
+      const a =
+        document.createElement("a");
+
+
+      a.href = url;
+
+      a.download =
+        "you-uzair-chat.json";
+
+
+      a.click();
+
+
+      URL.revokeObjectURL(url);
+
+
+      showToast(
+        "Chat exported."
+      );
+
+    }
+
+
+    /* =====================================================
+       CLEAR CHAT
+    ====================================================== */
+
+    function clearChat() {
+
+      if (
+        !confirm(
+          "Are you sure you want to clear the complete chat?"
+        )
+      ) {
+        return;
+      }
+
+
+      messages = [];
+
+      saveMessages();
+
+      renderMessages();
+
+      showToast(
+        "Chat cleared."
+      );
+
+    }
+
+
+    /* =====================================================
+       SOUND
+    ====================================================== */
+
+    function playSound() {
+
+      if (!settings.sound) {
+        return;
+      }
+
+
+      try {
+
+        const AudioContext =
+          window.AudioContext ||
+          window.webkitAudioContext;
+
+
+        if (!AudioContext) return;
+
+
+        const ctx =
+          new AudioContext();
+
+
+        const oscillator =
+          ctx.createOscillator();
+
+
+        const gain =
+          ctx.createGain();
+
+
+        oscillator.frequency.value =
+          700;
+
+
+        oscillator.type =
+          "sine";
+
+
+        gain.gain.setValueAtTime(
+          0.0001,
+          ctx.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.04,
+          ctx.currentTime + .01
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          ctx.currentTime + .08
+        );
+
+
+        oscillator.connect(gain);
+
+        gain.connect(ctx.destination);
+
+        oscillator.start();
+
+        oscillator.stop(
+          ctx.currentTime + .08
+        );
+
+      } catch {
+
+        // Sound is optional.
+
+      }
+
+    }
+
+
+    /* =====================================================
+       CLOSE MODAL WHEN CLICKING OUTSIDE
+    ====================================================== */
+
+    document
+      .getElementById("settingsModal")
+      .addEventListener(
+        "click",
+        e => {
+
+          if (
+            e.target.id ===
+            "settingsModal"
+          ) {
+
+            closeSettings();
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       INITIAL LOAD
+    ====================================================== */
+
+    applySettings();
+
+    renderMessages();
+
+  </script>
 
 </body>
 </html>
